@@ -535,7 +535,7 @@ def main(args):
     if media_type == "image":
         transform = get_image_transform(
             vision_input_type=config.data.vision_input_type,
-            image_res=model.vision_model.image_size,
+            image_res=model.vision_model.pretrain_image_size,
             max_num_tiles=config.data.max_num_tiles,
         )
         image = Image.open(media_path).convert("RGB")
@@ -543,7 +543,7 @@ def main(args):
         prompts.append((question, image))
     elif media_type == "video":
         transform = get_video_transform(
-            image_res=model.vision_model.image_size,
+            image_res=model.vision_model.pretrain_image_size,
         )
         video_info = (media_path, config.data.max_video_frames, None, None, None)
         frames, _ = transform(video_info)

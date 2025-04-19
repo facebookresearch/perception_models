@@ -8,19 +8,25 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import torch
 from torch import nn
 from torch.distributed._tensor import Replicate, Shard
-from torch.distributed.tensor.parallel import (ColwiseParallel,
-                                               PrepareModuleInput,
-                                               RowwiseParallel,
-                                               SequenceParallel,
-                                               parallelize_module)
+from torch.distributed.tensor.parallel import (
+    ColwiseParallel,
+    PrepareModuleInput,
+    RowwiseParallel,
+    SequenceParallel,
+    parallelize_module,
+)
 from torch.nn.attention.flex_attention import BlockMask, create_block_mask
 from xformers.ops import AttentionBias, fmha
 
-from core.transformer import (BaseTransformer, BaseTransformerArgs, RMSNorm,
-                              TiedLinear, cross_entropy)
+from core.transformer import (
+    BaseTransformer,
+    BaseTransformerArgs,
+    RMSNorm,
+    TiedLinear,
+    cross_entropy,
+)
 from core.utils import InitArgs
-from core.vision_encoder.pev1 import \
-    VisionTransformer as PEV1_VisionTransformer
+from core.vision_encoder.pe import VisionTransformer as PE_VisionTransformer
 from core.vision_projector.mlp import MLPProjector
 
 logger = logging.getLogger(__name__)
@@ -71,6 +77,7 @@ class LMTransformerArgs(BaseTransformerArgs):
     sliding_window: Optional[int] = None
 
     freeze_language_model: Optional[bool] = False
+    freeze_vision_model: Optional[bool] = False
 
     vision_model: Optional[Dict[str, Any]] = None
 
@@ -110,12 +117,12 @@ class LMTransformer(BaseTransformer):
 
         if args.vision_model:
             logger.info(
-                f"Initializing PEV1_VisionTransformer with args: {args.vision_model}"
+                f"Initializing PE_VisionTransformer with args: {args.vision_model}"
             )
-            self.vision_model = PEV1_VisionTransformer(**args.vision_model)
+            self.vision_model = PE_VisionTransformer(**args.vision_model, output_dim=None)
             self.vision_projector = MLPProjector(args)
 
-        self.freeze_vision_model = args.vision_model.get("freeze_vision_model", False)
+        self.freeze_vision_model = args.freeze_vision_model
         self.freeze_language_model = args.freeze_language_model
 
     def train(self, mode: bool = True):
@@ -148,7 +155,7 @@ class LMTransformer(BaseTransformer):
         h = self.tok_embeddings(token_values)
 
         if images is not None:
-            h_img = self.vision_model(images)
+            h_img = self.vision_model.forward_features(images, strip_cls_token=True)
             h_img = self.vision_projector(h_img)
 
             h = self.stitch_images_into_text(
