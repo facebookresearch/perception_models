@@ -43,7 +43,7 @@ class PEConfig:
     ls_init_value: float = None
     drop_path: float = 0.0
 
-    pretrain_image_size: int = 224,
+    image_size: int = 224,
     use_abs_posemb: bool = True
     use_cls_token: bool = False
     use_rope2d: bool = True
@@ -81,7 +81,7 @@ PE_TEXT_CONFIG = {}
 #########################################
 
 PE_VISION_CONFIG["PE-Core-G14-448"] = PEConfig(
-    pretrain_image_size=448,
+    image_size=448,
     patch_size=14,
     width=1536,
     layers=50,
@@ -101,7 +101,7 @@ PE_TEXT_CONFIG["PE-Core-G14-448"] = PETextConfig(
 
 
 PE_VISION_CONFIG["PE-Core-L14-336"] = PEConfig(
-    pretrain_image_size=336,
+    image_size=336,
     patch_size=14,
     width=1024,
     layers=24,
@@ -121,7 +121,7 @@ PE_TEXT_CONFIG["PE-Core-L14-336"] = PETextConfig(
 
 
 PE_VISION_CONFIG["PE-Core-B16-224"] = PEConfig(
-    pretrain_image_size=224,
+    image_size=224,
     patch_size=16,
     width=768,
     layers=12,
@@ -146,7 +146,7 @@ PE_TEXT_CONFIG["PE-Core-B16-224"] = PE_TEXT_CONFIG["PE-Core-L14-336"]
 
 PE_VISION_CONFIG["PE-Lang-G14-448"] = replace(
     PE_VISION_CONFIG["PE-Core-G14-448"],
-    pretrain_image_size=448,
+    image_size=448,
     pool_type="none",
     use_ln_post=False,
     output_dim=None,
@@ -156,7 +156,7 @@ PE_VISION_CONFIG["PE-Lang-G14-448"] = replace(
 
 PE_VISION_CONFIG["PE-Lang-L14-448"] = replace(
     PE_VISION_CONFIG["PE-Core-L14-336"],
-    pretrain_image_size=448,
+    image_size=448,
     pool_type="none",
     use_ln_post=False,
     output_dim=None,
@@ -172,7 +172,7 @@ PE_VISION_CONFIG["PE-Lang-L14-448"] = replace(
 
 PE_VISION_CONFIG["PE-Spatial-G14-448"] = replace(
     PE_VISION_CONFIG["PE-Core-G14-448"],
-    pretrain_image_size=448,
+    image_size=448,
     pool_type="none",
     use_ln_post=False,
     output_dim=None,

@@ -304,7 +304,7 @@ class VisionTransformer(nn.Module):
         use_ln_post: bool = True,
         ls_init_value: float = None,
         drop_path: float = 0.0,
-        pretrain_image_size: int = 448,
+        image_size: int = 448,  # Pretrain image size only; you can pass in any image size
         use_abs_posemb: bool = True,
         use_rope2d: bool = True,
         use_cls_token: bool = False,
@@ -326,7 +326,7 @@ class VisionTransformer(nn.Module):
         self.use_abs_posemb = use_abs_posemb
         self.use_cls_token = use_cls_token
         self.use_rope2d = use_rope2d
-        self.pretrain_image_size = pretrain_image_size
+        self.image_size = image_size
 
         self.conv1 = nn.Conv2d(
             in_channels=3,
@@ -390,7 +390,7 @@ class VisionTransformer(nn.Module):
             self.class_embedding = nn.Parameter(init_scale * torch.randn(self.width))
 
         if self.use_abs_posemb:
-            self.posemb_grid_size = self.pretrain_image_size // self.patch_size
+            self.posemb_grid_size = self.image_size // self.patch_size
             self.positional_embedding = nn.Parameter(
                 init_scale
                 * torch.randn(
@@ -703,7 +703,7 @@ class CLIP(TextTransformer):
     ):
         super(CLIP, self).__init__(**asdict(text_cfg))
         self.visual = VisionTransformer(**asdict(vision_cfg))
-        self.pretrain_image_size = self.visual.pretrain_image_size  # For ease of use
+        self.image_size = self.visual.image_size  # For ease of use
         self.logit_scale = nn.Parameter(torch.ones([]) * init_logit_scale)
 
 

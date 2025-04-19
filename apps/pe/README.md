@@ -134,7 +134,7 @@ print("CLIP configs:", pe.CLIP.available_configs())
 model = pe.CLIP.from_config("PE-Core-L14-336", pretrained=True)  # Downloads from HF
 model = model.cuda()
 
-preprocess = transforms.get_image_transform(model.pretrain_image_size)
+preprocess = transforms.get_image_transform(model.image_size)
 tokenizer = transforms.get_text_tokenizer(model.context_length)
 
 image = preprocess(Image.open("docs/assets/cat.png")).unsqueeze(0).cuda()
@@ -172,7 +172,7 @@ print("PE configs:", pe.VisionTransformer.available_configs())
 model = pe.VisionTransformer.from_config("PE-Lang-L14-448", pretrained=True)  # Loads from HF
 model = model.cuda()
 
-preprocess = transforms.get_image_transform(model.pretrain_image_size)
+preprocess = transforms.get_image_transform(model.image_size)
 image = preprocess(Image.open("docs/assets/cat.png")).unsqueeze(0).cuda()
 
 out = model.forward_features(image)  # pass layer_idx=<idx> to get a specific layer's output!
