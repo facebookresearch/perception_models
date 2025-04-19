@@ -155,7 +155,7 @@ class LMTransformer(BaseTransformer):
         h = self.tok_embeddings(token_values)
 
         if images is not None:
-            h_img = self.vision_model.forward_features(images, strip_cls_token=True)
+            h_img = self.vision_model(images, strip_cls_token=True)
             h_img = self.vision_projector(h_img)
 
             h = self.stitch_images_into_text(
