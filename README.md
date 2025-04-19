@@ -17,8 +17,11 @@ Perception Models is a user-friendly repository designed to support the training
 [![Paper](https://img.shields.io/badge/arXiv-2504.13181-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2504.13181)
 [![Model License](https://img.shields.io/badge/Model_License-Apache_2.0-olive)](https://opensource.org/licenses/Apache-2.0)
 
-We release PE - a family of state-of-the-art vision encoders for vision-centric
-and vision-language tasks. We refer the readers to [`apps/pe/README.md`](apps/pe/README.md) where we provide details about inference, evaluation and downstream tasks.
+Perception Encoder (PE) is an extremely powerful and versatile family of vision encoders for both images and video: PE core can outperform SigLIP2 on Image CLIP and InternVideo2 on Video CLIP; PE lang can be used to outperform QwenVL2.5 and InternVL3 on vision language modeling; and PE spatial can outperform DINOv2 on dense prediction tasks. And all of this follows the same, easily scalable contrastive pretraining.
+
+See [`apps/pe/README.md`](apps/pe/README.md) for more information and how to get started using them!
+
+
 
 ---
 
@@ -27,7 +30,9 @@ and vision-language tasks. We refer the readers to [`apps/pe/README.md`](apps/pe
 [![Paper](https://img.shields.io/badge/arXiv-2504.13180-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2504.13180)
 [![Model License](https://img.shields.io/badge/Model_License-FAIR_Research_License-lightgrey)](LICENSE.PLM)
 
-We release PLM - a family of open and fully reproducible models to facilitate research in vision-language model (VLM). We refer the readers to [`apps/plm/README.md`](apps/plm/README.md) where we provide details about training, evaluation and inference using PLM.
+PerceptionLM (PLM) is a family of open and fully reproducible models to facilitate research in vision-language modeling (VLM). In conjunction with PE, it is powerful enough to compete with the latest state-of-the-art VLMs such as InternVL3 and QwenVL2.5, while using _fully open data_. We also release the largest spatiotemporally annotated video captioning and fine-grained human activity recognition datasets to ever exist.
+
+See [`apps/plm/README.md`](apps/plm/README.md) for details and how to get started!
 
 ---
 
