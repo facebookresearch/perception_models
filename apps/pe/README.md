@@ -107,7 +107,7 @@ We release one checkpoint for PE spatial so far:
 See paper for full set of evaluations and fair comparison to other works.
 
 ## PE Video Dataset (PVD)
-In the process of developing the video data engine we use for PE core, we have collected a high-quality video dataset that contains 1M diverse videos with high visual fidelity and large resolution, split into 10 high level categories. We also annotated 120K samples with the highest amount of motiotion with our video captioning data engine and further asked human annotators to refine the captions. You can find more information about PVD [here](https://ai.meta.com/datasets/pe-video/).
+In the process of developing the video data engine we use for PE core, we have collected a high-quality video dataset that contains 1M diverse videos with high visual fidelity and large resolution, split into 10 high level categories. We also annotated 120K samples with the highest amount of motiotion with our video captioning data engine and further asked human annotators to refine the captions. You can find more information about and download PVD [here](https://ai.meta.com/datasets/pe-video/).
 
 
 # Usage
