@@ -28,6 +28,7 @@ PE has 3 types of checkpoints, each excelling in a different area of computer vi
 Finally, we also release a dataset we collected in the process of creating our novel video data engine:
  - [PE Video Dataset (PVD)](#pe-video-dataset-pvd): an diverse set of 1M high quality datasets with accompanying metadata as well as 120K human-refined detailed video captions.
 
+If you want to get started right away check out the [usage](#usage) section!
 
 :construction: This repository is under construction! :construction:
 
