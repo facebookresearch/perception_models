@@ -711,15 +711,12 @@ class CLIP(TextTransformer):
         x = self.visual(image)
         return F.normalize(x, dim=-1) if normalize else x
 
-    def encode_video(self, video, num_frames, normalize: bool = False):
-        n = len(video)
-        b, c, h, w = video[0].shape
-        assert num_frames == n
-        frms = torch.stack(video).permute(1, 0, 2, 3, 4).reshape(b * n, c, h, w)
+    def encode_video(self, video, normalize: bool = False): # b n c h w
+        b, n, c, h, w = video.shape
+        frms = video.reshape(b * n, c, h, w)
         frm_feats = self.encode_image(frms, normalize=normalize)
-        video_feats = frm_feats.reshape(b, num_frames, -1)
+        video_feats = frm_feats.reshape(b, n, -1)
         video_feats = video_feats.mean(dim=1)
-
         return video_feats
 
     def encode_text(self, text, normalize: bool = False):

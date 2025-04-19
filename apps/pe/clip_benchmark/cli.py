@@ -27,8 +27,6 @@ from clip_benchmark.metrics import (linear_probe, multiclass_retrieval,
                                     zeroshot_retrieval)
 from clip_benchmark.model_collection import (get_model_collection_from_file,
                                              model_collection)
-# from clip_benchmark.models import MODEL_TYPES, load_clip
-from clip_benchmark.models import load_clip
 
 
 class ParseKwargs(argparse.Action):
@@ -47,6 +45,8 @@ class ParseKwargs(argparse.Action):
 
 
 from dataclasses import dataclass
+import core.vision_encoder.pe as pe
+import core.vision_encoder.transforms as transforms
 
 
 @dataclass
@@ -565,20 +565,15 @@ def run(args):
     if args.skip_load:
         model, transform, collate_fn, dataloader = None, None, None, None
     else:
-        model, transform, tokenizer = load_clip(
-            args,
-            model_type=args.model_type,
-            model_name=args.model,
-            pretrained=args.pretrained,
-            cache_dir=args.model_cache_dir,
-            device=args.device,
-        )
-        model.eval()
-        if args.model.count("nllb-clip") > 0:
-            # for NLLB-CLIP models, we need to set the language prior to running the tests
-            from clip_benchmark.models.nllb_clip import set_language
+        model_name = args.model
+        model = pe.CLIP.from_config(model_name, pretrained=True)  # Downloads from HF
+        model = model.cuda()
 
-            set_language(tokenizer, args.language)
+        transform = transforms.get_image_transform(model.image_size)
+        tokenizer = transforms.get_text_tokenizer(model.context_length)
+
+        model.eval()
+
         dataset = build_dataset(
             dataset_name=args.dataset,
             root=dataset_root,
@@ -641,17 +636,9 @@ def run(args):
                 num_workers=args.num_workers,
                 collate_fn=collate_fn,
             )
-    visualize = Visualization(**args.visualize)
-    if visualize.enabled:
-        metrics = visualization.evaluate(
-            model,
-            dataloader,
-            device=args.device,
-            visargs=visualize,
-            amp=args.amp,
-            args=args,
-        )
-    elif task == "zeroshot_classification":
+
+
+    if task == "zeroshot_classification":
         zeroshot_templates = (
             dataset.templates if hasattr(dataset, "templates") else None
         )

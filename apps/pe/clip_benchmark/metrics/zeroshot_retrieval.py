@@ -60,6 +60,7 @@ def evaluate(
             batch_images = batch_images.to(device, torch.float32)
         elif isinstance(batch_images, (list, tuple)):  # video frames as a list/tuple
             batch_images = [x.to(device, torch.float32) for x in batch_images]
+            batch_images = torch.stack(batch_images, dim=0).permute(1,0,2,3,4).contiguous() # nbchw -> bncwh            
         else:
             raise NotImplementedError
 
@@ -77,9 +78,7 @@ def evaluate(
         # compute the embedding of images and texts
         with torch.no_grad(), autocast():
             if video_dataset:
-                image_features = model.encode_video(
-                    batch_images, dataloader.dataset.num_frames
-                )
+                image_features = model.encode_video(batch_images)
             else:
                 image_features = model.encode_image(batch_images)
             batch_images_emb = F.normalize(image_features, dim=-1)

@@ -146,7 +146,7 @@ with torch.no_grad(), torch.autocast("cuda"):
 
 print("Label probs:", text_probs)  # prints: [[0.0, 0.0, 1.0]]
 ```
-
+For a in-depth demo for image and video feature extraction, please refer to our [demo notebook](docs/demo.ipynb).
 
 
 

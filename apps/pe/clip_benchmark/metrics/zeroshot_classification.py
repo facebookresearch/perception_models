@@ -128,6 +128,7 @@ def run_classification(
                 images = images.to(device, torch.float32)
             elif isinstance(images, (list, tuple)):  # video frames as a list/tuple
                 images = [x.to(device, torch.float32) for x in images]
+                images = torch.stack(images, dim=0).permute(1,0,2,3,4).contiguous() # nbchw -> bncwh
             else:
                 raise NotImplementedError
 
@@ -136,9 +137,7 @@ def run_classification(
             with autocast():
                 # predict
                 if video_dataset:
-                    image_features = model.encode_video(
-                        images, dataloader.dataset.num_frames
-                    )
+                    image_features = model.encode_video(images)
                 else:
                     image_features = model.encode_image(images)
 
