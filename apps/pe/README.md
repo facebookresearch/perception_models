@@ -122,28 +122,25 @@ Perception Encoder follows the same structure as [open_clip](https://github.com/
 
 ```python
 import torch
-from core.vision_encoder.factory import create_model_and_transforms, get_tokenizer
 from PIL import Image
+import core.vision_encoder.pe as pe
+import core.vision_encoder.transforms as transforms
 
-model_name = 'PEv1-G14-448'
-pretrained = 'path/to/PE-Core-G14-448.pt'
+print("CLIP configs:", pe.CLIP.available_configs())
+# CLIP configs: ['PE-Core-G14-448', 'PE-Core-L14-336', 'PE-Core-B16-224']
 
-model, _, preprocess = create_model_and_transforms(
-    model_name,
-    pretrained = pretrained,
-)
+model = pe.CLIP.from_config("PE-Core-L14-336", pretrained=True)  # Downloads from HF
 model = model.cuda()
-tokenizer = get_tokenizer(model_name)
+
+preprocess = transforms.get_image_transform(model.pretrain_image_size)
+tokenizer = transforms.get_text_tokenizer(model.context_length)
 
 image = preprocess(Image.open("docs/assets/cat.png")).unsqueeze(0).cuda()
 text = tokenizer(["a diagram", "a dog", "a cat"]).cuda()
 
 with torch.no_grad(), torch.autocast("cuda"):
-    image_features = model.encode_image(image)
-    text_features = model.encode_text(text)
-    image_features /= image_features.norm(dim=-1, keepdim=True)
-    text_features /= text_features.norm(dim=-1, keepdim=True)
-    text_probs = (100.0 * image_features @ text_features.T).softmax(dim=-1)
+    image_features, text_features, logit_scale = model(image, text)
+    text_probs = (logit_scale * image_features @ text_features.T).softmax(dim=-1)
 
 print("Label probs:", text_probs)  # prints: [[0.0, 0.0, 1.0]]
 ```
@@ -159,44 +156,27 @@ Please refer to [`docs/evaluation.md`](docs/evaluation.md) for the following ben
 - zero-shot video retrieval
 
 
-### 3. Loading PE lang / PE spatial Checkpoints
-For loading and using pretrained PE-Lang and PE-Spatial models with an additional layer scale, we provide a sample code for PE-Spatial as follows:
+### 3. Loading PE core / PE lang / PE spatial Vision Encoder Checkpoints
+Loading the vision encoders for PE core, PE lang, and PE spatial for downstream use is similar to the CLIP checkpoints, just using `VisionTransformer` instead. Here you can additionally load PE lang and PE spatial for downstream feature encoding.
 ```python
 import torch
-from dataclasses import dataclass
-from core.vision_encoder.pev1 import VisionTransformer
-from core.vision_encoder.config import PEConfig, PEV1_SETTINGS
+from PIL import Image
+import core.vision_encoder.pe as pe
+import core.vision_encoder.transforms as transforms
 
-pev1_config = PEV1_SETTINGS['pev1_spatial_G14_448']
-config = PEConfig(**pev1_config)
-ckpt_path = 'path/to/PE-Spatial-G14-448.pt'
+print("PE configs:", pe.VisionTransformer.available_configs())
+# PE configs: ['PE-Core-G14-448', 'PE-Core-L14-336', 'PE-Core-B16-224', 'PE-Lang-G14-448', 'PE-Lang-L14-448', 'PE-Spatial-G14-448']
 
-model = VisionTransformer(
-    ### load pre-trained PE
-    load_ckpt = True,
-    ckpt_path = ckpt_path,
-    ### model config
-    image_size = config.image_size,
-    patch_size = config.patch_size,
-    width = config.width,
-    layers = config.layers,
-    heads=config.heads,
-    embed_cls_token = config.embed_cls_token,
-    abs_pos_embed = config.abs_pos_embed,
-    mlp_ratio = config.mlp_ratio,
-    pool_type = config.pool_type,
-    use_ln_post = config.use_ln_post,
-    vision_select_feature = config.vision_select_feature,
-    ls_init_value = config.ls_init_value,    
-    )
-    
-model.cuda()
-input = torch.rand(8,3,224,224).cuda()
-output = model(input)
-print(output.shape) # torch.Size([8, 256, 1536])
+model = pe.VisionTransformer.from_config("PE-Lang-L14-448", pretrained=True)  # Loads from HF
+model = model.cuda()
+
+preprocess = transforms.get_image_transform(model.pretrain_image_size)
+image = preprocess(Image.open("docs/assets/cat.png")).unsqueeze(0).cuda()
+
+out = model.forward_features(image)  # pass layer_idx=<idx> to get a specific layer's output!
+print(out.shape)
+# torch.Size([1, 1025, 1024])
 ```
-
-Please refer to [core.vision_encoder.config](../../core/vision_encoder/config.py) and [core.vision_encoder.pev1](../../core/vision_encoder/pev1.py) for more details. 
 
 ---
 
