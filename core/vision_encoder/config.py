@@ -3,193 +3,176 @@
 """
 Include all available vision encoder configurations.
 """
-from dataclasses import dataclass
+
+from dataclasses import dataclass, replace
+
+from functools import partial
+from typing import Callable, Optional, Sequence, Tuple, List
+
+from huggingface_hub import hf_hub_download
+
+
+
+def fetch_pe_checkpoint(name: str, path: Optional[str] = None):
+    path = path or f"hf://facebook/{name}:{name}.pt"
+
+    if path.startswith("hf://"):
+        # Load from huggingface
+        path = path[len("hf://"):]
+        repo, file = path.split(":")
+
+        return hf_hub_download(repo_id=repo, filename=file)
+    else:
+        return path
+
+
+
 
 @dataclass
 class PEConfig:
-    image_size: int = 448
-    patch_size: int = 14
-    width: int = 1536
-    layers: int = 50
-    heads: int = 16
-    head_width: int = 96
-    mlp_ratio: float = 5.833333333333333
+    """ Vision Tower Config. """
+    patch_size: int
+    width: int
+    layers: int
+    heads: int
+    mlp_ratio: float
+    output_dim: Optional[int]
 
     ls_init_value: float = None
     drop_path: float = 0.0
 
-    abs_pos_embed: bool = True
-    embed_cls_token: bool = False
+    pretrain_image_size: int = 224,
+    use_abs_posemb: bool = True
+    use_cls_token: bool = False
     use_rope2d: bool = True
-
-    output_dim: int = 1024
 
     pool_type: str = "attn"
     attn_pooler_heads: int = 8
 
     use_ln_pre: bool = True
     use_ln_post: bool = True
-    vision_select_feature: str = 'pooled' # "patch" or "pooled
-
-    img_mean: tuple = (0.5, 0.5, 0.5)
-    img_std: tuple = (0.5, 0.5, 0.5)
 
 
+@dataclass
+class PETextConfig:
+    """ Text Tower Config. """
+    context_length: int
+    width: int
+    heads: int
+    layers: int
 
-PEV1_SETTINGS = {
-    # CORE
-    "pev1_G14_448": {
-        "image_size": 448,
-        "patch_size": 14,
-        "width": 1536,
-        'output_dim': 1280,
-        "layers": 50,
-        "heads": 16,
-        "embed_cls_token": False,
-        "abs_pos_embed": True,
-        "mlp_ratio": 5.833333334, 
-    },
-    "pev1_L14_336": {
-        "image_size": 336,
-        "patch_size": 14,
-        "width": 1024,
-        'output_dim': 1024,
-        "layers": 24,
-        "heads": 16,
-        "embed_cls_token": True,
-        "abs_pos_embed": True,
-        "mlp_ratio": 4.0, 
-    },
-    "pev1_B16_224": {
-        "image_size": 224,
-        "patch_size": 16,
-        "width": 768,
-        'output_dim': 1024,
-        "layers": 12,
-        "heads": 12,
-        "mlp_ratio": 4.0,
-        "embed_cls_token": True,
-        "abs_pos_embed": True,
-    },
-    # LANG
-    "pev1_lang_G14_448": {
-        "image_size": 448,
-        "patch_size": 14,
-        "width": 1536,
-        "layers": 47,
-        "heads": 16,
-        "embed_cls_token": False,
-        "abs_pos_embed": True,
-        "mlp_ratio": 5.833333334,
-        "pool_type": "none",
-        "use_ln_post": False,
-        "vision_select_feature": "patch",
-        "ls_init_value": 0.1,
-    },
-    "pev1_lang_L14_448": {
-        "image_size": 448,
-        "patch_size": 14,
-        "width": 1024,
-        "layers": 23,
-        "heads": 16,
-        "embed_cls_token": True,
-        "abs_pos_embed": True,
-        "mlp_ratio": 4.0,
-        "ls_init_value": 0.1,
-        "vision_select_feature": "patch",
-        "use_ln_post": False,
-        "pool_type": "none",
-        "remove_class_token_output": True,
-    },
-    # SPATIAL
-    "pev1_spatial_G14_448": {
-        "image_size": 448,
-        "patch_size": 14,
-        "width": 1536,
-        "layers": 50,
-        "heads": 16,
-        "embed_cls_token": False,
-        "abs_pos_embed": True,
-        "mlp_ratio": 5.833333334,
-        "pool_type": "none",
-        "use_ln_post": False,
-        "vision_select_feature": "patch",
-        "ls_init_value": 0.1,
-    },
-}
+    output_dim: int
+
+    mlp_ratio: float = 4.0
+    vocab_size: int = 49408
 
 
-PEV1_CLIP_SETTINGS = {
-    "pev1_G14_448": {
-        'vision':{
-            "image_size": 448,
-            "patch_size": 14,
-            "width": 1536,
-            'output_dim': 1280,
-            "layers": 50,
-            "heads": 16,
-            "mlp_ratio": 5.833333334,
-            "embed_cls_token": False,
-            "abs_pos_embed": True,
-        },
-        'text':{
-            "context_length": 72,
-            "vocab_size": 49408,
-            "width": 1280,
-            'output_dim': 1280,
-            "layers": 24,
-            "heads": 16,
-            "mlp_ratio": 4.0,
-            "pool_type": "argmax",
-        },
-    },
-    "pev1_L14_336": {
-        'vision':{
-            "image_size": 336,
-            "patch_size": 14,
-            "width": 1024,
-            'output_dim': 1024,
-            "layers": 24,
-            "heads": 16,
-            "mlp_ratio": 4.0,
-            "embed_cls_token": True,
-            "abs_pos_embed": True,
-        },
-        'text':{
-            "context_length": 32,
-            "vocab_size": 49408,
-            "width": 1024,
-            'output_dim': 1024,
-            "layers": 24,
-            "heads": 16,
-            "mlp_ratio": 4.0,
-            "embed_cls_token": False,
-            "pool_type": "argmax",
-        },
-    },
-    "pev1_B16_224": {
-        'vision':{
-            "image_size": 224,
-            "patch_size": 16,
-            "width": 768,
-            'output_dim': 1024,
-            "layers": 12,
-            "heads": 12,
-            "mlp_ratio": 4.0,
-            "embed_cls_token": True,
-            "abs_pos_embed": True,
-        },
-        'text':{
-            "context_length": 32,
-            "vocab_size": 49408,
-            "width": 1024,
-            'output_dim': 1024,
-            "layers": 24,
-            "heads": 16,
-            "mlp_ratio": 4.0,
-            "embed_cls_token": False,
-            "pool_type": "argmax",
-        },
-    },      
-}
 
+
+PE_VISION_CONFIG = {}
+PE_TEXT_CONFIG = {}
+
+
+
+#########################################
+#                PE CORE                #
+#########################################
+
+PE_VISION_CONFIG["PE-Core-G14-448"] = PEConfig(
+    pretrain_image_size=448,
+    patch_size=14,
+    width=1536,
+    layers=50,
+    heads=16,
+    mlp_ratio=8960 / 1536,
+    pool_type="attn",
+    output_dim=1280,
+    use_cls_token=False,
+)
+PE_TEXT_CONFIG["PE-Core-G14-448"] = PETextConfig(
+    context_length=72,
+    width=1280,
+    heads=20,
+    layers=24,
+    output_dim=1280
+)
+
+
+PE_VISION_CONFIG["PE-Core-L14-336"] = PEConfig(
+    pretrain_image_size=336,
+    patch_size=14,
+    width=1024,
+    layers=24,
+    heads=16,
+    mlp_ratio=4.0,
+    pool_type="attn",
+    output_dim=1024,
+    use_cls_token=True,
+)
+PE_TEXT_CONFIG["PE-Core-L14-336"] = PETextConfig(
+    context_length=32,
+    width=1024,
+    heads=16,
+    layers=24,
+    output_dim=1024
+)
+
+
+PE_VISION_CONFIG["PE-Core-B16-224"] = PEConfig(
+    pretrain_image_size=224,
+    patch_size=16,
+    width=768,
+    layers=12,
+    heads=12,
+    mlp_ratio=4.0,
+    pool_type="attn",
+    output_dim=1024,
+    use_cls_token=True,
+)
+PE_TEXT_CONFIG["PE-Core-B16-224"] = PE_TEXT_CONFIG["PE-Core-L14-336"]
+
+
+
+
+
+
+
+
+#########################################
+#                PE Lang                #
+#########################################
+
+PE_VISION_CONFIG["PE-Lang-G14-448"] = replace(
+    PE_VISION_CONFIG["PE-Core-G14-448"],
+    pretrain_image_size=448,
+    pool_type="none",
+    use_ln_post=False,
+    output_dim=None,
+    ls_init_value=0.1,
+    layers=47,
+)
+
+PE_VISION_CONFIG["PE-Lang-L14-448"] = replace(
+    PE_VISION_CONFIG["PE-Core-L14-336"],
+    pretrain_image_size=448,
+    pool_type="none",
+    use_ln_post=False,
+    output_dim=None,
+    ls_init_value=0.1,
+    layers=23
+)
+
+
+
+#########################################
+#                PE Spatial             #
+#########################################
+
+PE_VISION_CONFIG["PE-Spatial-G14-448"] = replace(
+    PE_VISION_CONFIG["PE-Core-G14-448"],
+    pretrain_image_size=448,
+    pool_type="none",
+    use_ln_post=False,
+    output_dim=None,
+    ls_init_value=0.1,
+)

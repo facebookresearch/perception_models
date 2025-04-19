@@ -278,20 +278,6 @@ class SimpleTokenizer(object):
         return result
 
 
-_tokenizer = SimpleTokenizer()
-
-
-def decode(output_ids: torch.Tensor):
-    output_ids = output_ids.cpu().numpy()
-    return _tokenizer.decode(output_ids)
-
-
-def tokenize(
-    texts: Union[str, List[str]], context_length: int = DEFAULT_CONTEXT_LENGTH
-) -> torch.LongTensor:
-    return _tokenizer(texts, context_length=context_length)
-
-
 def random_mask_tokenize(
     texts: Union[str, List[str]],
     context_length: int,
@@ -343,76 +329,10 @@ def simple_mask_tokenize(
     return result
 
 
-def syntax_mask_tokenize(
-    texts: Union[str, List[str]],
-    context_length: int,
-    sot_token_id: int = _tokenizer.encoder["<start_of_text>"],
-    eot_token_id: int = _tokenizer.encoder["<end_of_text>"],
-    encode_fn: Callable = _tokenizer.encode,
-) -> torch.LongTensor:
-    """Returns the tokenized representation of given input string(s).
-    Apply syntax masking before tokenize.
-    """
-    import nltk
-
-    # We can't download the tokenizers on ava, use the pre-downloaded ones from
-    # /checkpoint/maestro/tokenizers/nltk_data
-    #
-    # global _nltk_init
-    # if not _nltk_init:
-    #     # run them for the first time
-    #     nltk.download("punkt")
-    #     nltk.download("averaged_perceptron_tagger")
-    #     _nltk_init = True
-
-    def get_order(x):
-        if x.startswith("NN"):
-            return 1
-        elif x.startswith("JJ"):
-            return 2
-        elif x.startswith("VB"):
-            return 3
-        else:
-            return 4
-
-    # syntax masking
-    new_texts = []
-    for text in texts:
-        list_tokens = nltk.tokenize.word_tokenize(text)
-        pos_tags = nltk.pos_tag(list_tokens)
-        #  sample the words by get_order method
-        order_list = [get_order(tag) for _, tag in pos_tags]
-        sorted_ids = np.argsort(np.array(order_list))
-        sampled_ids = sorted(
-            sorted_ids[: context_length - 2]
-        )  # need 2 slots for sot and eot tokens
-        sampled_tokens = np.take(
-            np.array(list_tokens), sampled_ids, axis=0
-        )  # sample the tokens
-
-        new_text = ""
-        for token in sampled_tokens:
-            new_text = new_text + str(token) + " "
-        new_text = new_text.strip()
-        new_texts.append(new_text)
-    texts = new_texts
-
-    all_tokens = [[sot_token_id] + encode_fn(text) + [eot_token_id] for text in texts]
-    result = torch.zeros(len(all_tokens), context_length, dtype=torch.long)
-
-    for i, tokens in enumerate(all_tokens):
-        # still need first truncate because some words produces two tokens
-        if len(tokens) > context_length:
-            tokens = tokens[:context_length]  # Truncate
-            tokens[-1] = eot_token_id
-        result[i, : len(tokens)] = torch.tensor(tokens)
-
-    return result
-
 
 def get_reduction_mask_fn(type: str):
     """Choose strategy for dropping (masking) tokens to achieve target context length"""
-    assert type in ("simple", "random", "shuffle", "syntax")
+    assert type in ("simple", "random", "shuffle")
     if type == "simple":
         return simple_mask_tokenize  # randomly select block [start:end]
     elif type == "random":
@@ -421,5 +341,3 @@ def get_reduction_mask_fn(type: str):
         return partial(
             random_mask_tokenize, shuffle=True
         )  # randomly drop tokens (shuffle order)
-    elif type == "syntax":
-        return syntax_mask_tokenize  # randomly drop prioritized by syntax

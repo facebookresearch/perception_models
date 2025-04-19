@@ -11,7 +11,7 @@ Daniel Bolya*, Po-Yao Huang*, Peize Sun*, Jang Hyun Cho*, Andrea Madotto*, Chen 
 \* Joint First Author  
 _[HuggingFace](https://huggingface.co/collections/facebook/perception-encoder-67f977c9a65ca5895a7f6ba1)_ | _[Blog](ai.meta.com/blog/meta-fair-updates-perception-localization-reasoning)_ | _[GitHub](https://github.com/facebookresearch/perception_models)_ | _[arXiv](https://arxiv.org/abs/2504.13181)_ | _[BibTeX](#citation)_
 
-<img src="docs/teaser.png" style="width: 90%; margin: 0 auto; display: block;" />
+<img src="docs/assets/teaser.png" style="width: 90%; margin: 0 auto; display: block;" />
 <br />
 
 Perception Encoder (PE) is a family of models that exhibits state-of-the-art performance on a large variety of vision tasks. By using a robust contrastive pretraining recipe and finetuning on synthetically aligned videos, PE not only outperforms all existing models on classification and retrieval, but it also internally produces strong, general features that scale for downstream tasks. PE unlocks the ability for large-scale contrastive pretraining to transfer to downstream tasks with alignment tuning to capitalize on those general features.
@@ -90,11 +90,11 @@ PE spatial similarly takes the strong spatial performance from the intermediate 
 
 And despite being a short finetuning step using PE core's intermediate layers as a teacher (a pure CLIP model with a global loss) plus a little bit of refinement with SAM, the resulting feature space is quite detailed and well-aligned. Here we picture the PCA of the last layer features mapped to LCh color space (see the paper for more details):
 
-<img src="docs/spatial_features.png" style="width: 80%; margin: 0 auto; padding-top: 20px; padding-bottom: 20px; display: block;" />
+<img src="docs/assets/spatial_features.png" style="width: 80%; margin: 0 auto; padding-top: 20px; padding-bottom: 20px; display: block;" />
 
 PE spatial also has nuanced semantic correspondences between objects thanks to its CLIP pretraining. Here we show again PCA but only for the tokens not masked. PE spatial shows correspondence between parts like the first image cats' heads, backs, and legs. Additionally, PE spatial can show more nuanced correspondences like for the last two images, where the red/blue directions still denote parts, but the lightness/darkness directions now indicate semantics (i.e., dog/cat breed):  
 
-<img src="docs/spatial_correspondence.png" style="width: 80%; margin: 0 auto; padding-top: 20px; padding-bottom: 20px; display: block;" />
+<img src="docs/assets/spatial_correspondence.png" style="width: 80%; margin: 0 auto; padding-top: 20px; padding-bottom: 20px; display: block;" />
 
 We release one checkpoint for PE spatial so far:  
 | Encoder | Checkpoint | ADE20k <br/> Linear Probe <br/> 448px w/o TTA | LVIS <br /> Mask R-CNN 1024px <br /> Box / Mask mAP | COCO <br/> DETA 1536px <br /> Box mAP |
@@ -135,7 +135,7 @@ model, _, preprocess = create_model_and_transforms(
 model = model.cuda()
 tokenizer = get_tokenizer(model_name)
 
-image = preprocess(Image.open("docs/cat.png")).unsqueeze(0).cuda()
+image = preprocess(Image.open("docs/assets/cat.png")).unsqueeze(0).cuda()
 text = tokenizer(["a diagram", "a dog", "a cat"]).cuda()
 
 with torch.no_grad(), torch.autocast("cuda"):
