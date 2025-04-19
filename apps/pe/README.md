@@ -16,6 +16,8 @@ _[HuggingFace](https://huggingface.co/collections/facebook/perception-encoder-67
 
 Perception Encoder (PE) is a family of models that exhibits state-of-the-art performance on a large variety of vision tasks. By using a robust contrastive pretraining recipe and finetuning on synthetically aligned videos, PE not only outperforms all existing models on classification and retrieval, but it also internally produces strong, general features that scale for downstream tasks. PE unlocks the ability for large-scale contrastive pretraining to transfer to downstream tasks with alignment tuning to capitalize on those general features.
 
+The result is an extremely powerful family of checkpoints: PE core can outperform SigLIP2 on Image CLIP and InternVideo2 on Video CLIP; PE lang can be used to outperform QwenVL2.5 and InternVL3 on multimodal language modeling; and PE spatial can outperform DINOv2 on dense prediction tasks—all following the same, easily scalable contrastive pretraining.
+
 
 ### Contents
 PE has 3 types of checkpoints, each excelling in a different area of computer vision:
