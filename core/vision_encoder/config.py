@@ -21,6 +21,8 @@ def fetch_pe_checkpoint(name: str, path: Optional[str] = None):
         path = path[len("hf://"):]
         repo, file = path.split(":")
 
+        # To count the download, config.yaml is empty
+        hf_hub_download(repo_id=repo, filename="config.yaml")
         return hf_hub_download(repo_id=repo, filename=file)
     else:
         return path
