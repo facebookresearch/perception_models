@@ -32,24 +32,19 @@ model:
     weight_tying: false
     max_seqlen: 3072
     freeze_language_model: false
+    freeze_vision_model: false
     pooling_ratio: 2
     vision_model:
-        freeze_vision_model: true
-        ckpt_path: ""
-        image_size: 448
+        pretrain_image_size: 448
         patch_size: 14
         width: 1536
-        layers: 50
+        layers: 47
         heads: 16
-        embed_cls_token: false
-        abs_pos_embed: true
+        use_cls_token: false
+        use_abs_posemb: true
         mlp_ratio: 5.833333334
-        vision_select_layer: -4
-        remove_unused_layers: true
-        load_ckpt: false
         ls_init_value: 0.1
         drop_path: 0.1
-        vision_select_feature: "patch"
         use_ln_post: false
         pool_type: "none"
     mlp_init:
