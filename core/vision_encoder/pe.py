@@ -530,8 +530,8 @@ class VisionTransformer(nn.Module):
 
         return x
 
-    def forward(self, x: torch.Tensor):
-        x = self.forward_features(x, norm=True)
+    def forward(self, x: torch.Tensor, **kwargs):
+        x = self.forward_features(x, norm=True, **kwargs)
         x = self._pool(x)
 
         if self.proj_dim is not None:
