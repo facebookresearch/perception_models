@@ -167,7 +167,7 @@ PE_VISION_CONFIG["PE-Lang-L14-448"] = replace(
 
 
 #########################################
-#                PE Spatial             #
+#               PE Spatial              #
 #########################################
 
 PE_VISION_CONFIG["PE-Spatial-G14-448"] = replace(
