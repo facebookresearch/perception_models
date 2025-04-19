@@ -34,9 +34,10 @@ model:
     high_freq_factor: 4
     max_seqlen: 3072
     freeze_language_model: true
+    freeze_vision_model: false
     pooling_ratio: 2
     vision_model:
-        pretrain_image_size: 448
+        image_size: 448
         patch_size: 14
         width: 1024
         layers: 23

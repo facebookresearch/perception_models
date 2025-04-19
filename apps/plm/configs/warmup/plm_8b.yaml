@@ -35,7 +35,7 @@ model:
     freeze_vision_model: true
     pooling_ratio: 2
     vision_model:
-        pretrain_image_size: 448
+        image_size: 448
         patch_size: 14
         width: 1536
         layers: 47

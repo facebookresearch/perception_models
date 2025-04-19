@@ -34,28 +34,21 @@ model:
     high_freq_factor: 4
     max_seqlen: 3072
     freeze_language_model: false
+    freeze_vision_model: false
     pooling_ratio: 2
     vision_model:
-        freeze_vision_model: true
-        ckpt_path: ""
         image_size: 448
         patch_size: 14
         width: 1024
-        layers: 24
+        layers: 23
         heads: 16
-        embed_cls_token: true
-        abs_pos_embed: true
+        use_cls_token: true
+        use_abs_posemb: true
         mlp_ratio: 4.0
-        vision_select_layer: -2
-        remove_unused_layers: true
-        load_ckpt: false
         ls_init_value: 0.1
         drop_path: 0.1
-        vision_select_feature: "patch"
         use_ln_post: false
         pool_type: "none"
-        class_token_in_front: false
-        remove_class_token_output: true
     mlp_init:
         use_gaussian: true
 
