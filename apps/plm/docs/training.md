@@ -9,7 +9,7 @@ We provide instruction to train or finetune PLM on a custom dataset.
 ---
 
 > [!TIP]
-> We provide configurations to run [`warm-up`](../configs/warmup/), [`sft`](../configs/sft/) to facilitate reproducibility of PLM training. We also provide configurations to [`finetune`](../configs/finetune/) PLM on custom datasets.
+> We provide configurations to run [`warm-up`](../configs/warmup/), [`sft`](../configs/sft/) to facilitate reproducibility of PLM training.
 
 
 ## Data Format :open_file_folder:
@@ -69,7 +69,7 @@ Please refer to [`apps/plm/configs/datasets.yaml`](apps/plm/configs/datasets.yam
 ---
 
 ## Training / Finetuning PLM :train:
-Training PLM involves creating a `.yaml` configuration file, defining all model and training related configurable parameters. Please refer to the provided [`sft`](../configs/sft/) or [`finetune`](../configs/finetune/) for details.
+Training PLM involves creating a `.yaml` configuration file, defining all model and training related configurable parameters. Please refer to the provided [`sft`](../configs/sft/) for details.
 
 > [!TIP]
 > To run the following code, download the [`dummy-datasets`](https://dl.fbaipublicfiles.com/plm/dummy_datasets.tar.gz) and extract them to `apps/plm/dummy_datasets`.
