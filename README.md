@@ -2,7 +2,8 @@
 
 This repo is the home to the state-of-the-art for image and video _perception_: [**Perception Encoder (PE)**](https://arxiv.org/abs/2504.13181) for image and video encoding and [**Perception Language Model (PLM)**](https://arxiv.org/abs/2504.13180) for decoding.
 
-> [!TIP] Click to Navigate!
+> [!TIP]
+> Click to Navigate!
 > [Perception Encoder](#perception-encoder-pe)
 > [Perception Language Model](#perception-language-model-plm)
 
