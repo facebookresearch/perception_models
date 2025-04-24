@@ -1,8 +1,10 @@
 # Perception Models: Powerful Models for Image and Video Perception
 
-<img src="apps/pe/docs/assets/teaser.png" style="width: 100%; margin: 0 auto; display: block;" />
-
 This repo is the home to the state-of-the-art for image and video _perception_: [**Perception Encoder (PE)**](https://arxiv.org/abs/2504.13181) for image and video encoding and [**Perception Language Model (PLM)**](https://arxiv.org/abs/2504.13180) for decoding.
+
+> [!TIP] Click to Navigate!
+> [Perception Encoder](#perception-encoder-pe)
+> [Perception Language Model](#perception-language-model-plm)
 
 ## Updates 
 
@@ -19,6 +21,8 @@ This repo is the home to the state-of-the-art for image and video _perception_: 
 [![Model License](https://img.shields.io/badge/Model_License-Apache_2.0-olive)](https://opensource.org/licenses/Apache-2.0)
 
 [Perception Encoder (PE)](https://arxiv.org/abs/2504.13181) is a family of the state-of-the-art vision encoders for encoding images and video: PE core outperforms SigLIP2 on image and InternVideo2 on video bencmarks; PE lang can be used to outperform QwenVL2.5 and InternVL3 on vision language modeling; and PE spatial outperforms DINOv2 on dense prediction tasks. And all of this follows the same, easily scalable contrastive pretraining. Please see [README](apps/pe/README.md) for more details.
+
+<img src="apps/pe/docs/assets/teaser.png" style="width: 100%; margin: 0 auto; display: block;" />
 
 ### Models
 PE has 3 types of checkpoints, each excelling in a different area of computer vision:
@@ -84,20 +88,34 @@ print("Label probs:", text_probs)  # prints: [[0.0, 0.0, 1.0]]
 
 
 ## Perception Language Model (PLM)
-[![Paper](https://img.shields.io/badge/Paper-PerceptionLM-b31b1b.svg)](https://ai.meta.com/research/publications/perceptionlm-open-access-data-and-models-for-detailed-visual-understanding)
-[![Paper](https://img.shields.io/badge/arXiv-2504.13180-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2504.13180)
 [![Hugging Face Collection](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Collection-blue)](https://huggingface.co/collections/facebook/perception-lm-67f9783f171948c383ee7498)
+[![Paper](https://img.shields.io/badge/Technical%20Report-PerceptionLM-b31b1b.svg)](https://ai.meta.com/research/publications/perceptionlm-open-access-data-and-models-for-detailed-visual-understanding)
+[![Paper](https://img.shields.io/badge/arXiv-2504.13180-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2504.13180)
 [![Colab](https://img.shields.io/badge/Google%20Colab-Tutorials-red)](apps/plm/notebook_demos)
 [![ModelLicense](https://img.shields.io/badge/Model_License-FAIR_Research_License-lightgrey)](LICENSE.PLM)
 
-> PerceptionLM (PLM) is a family of open and fully reproducible models to facilitate research in vision-language modeling (VLM). In conjunction with PE, it is powerful enough to compete with the latest state-of-the-art VLMs such as InternVL3 and QwenVL2.5, while using _fully open data_. We also release the largest spatiotemporally annotated video dense captioning and fine-grained human activity recognition datasets to ever exist.
-
-PLM consists of a vision encoder with a small scale (<8B parameters) LLM decoder. We start by an analysis of standard training pipelines with available data, without any proprietary model distillation. We investigate large-scale synthetic data and establish key scaling laws to identify critical data gaps that limit video understanding performance, especially for spatio-temporal reasoning and fine-grained understanding tasks. To fill these gaps, we release 2.8M human-labeled instances of fine-grained video question-answer pairs and spatio-temporally grounded video captions. This release is nearly an order of magnitude larger than the largest existing video datasets. Additionally, we introduce PLM–VideoBench, a suite for evaluating challenging video understanding tasks focusing on the ability to reason about "what", "where", "when", and "how" of a video.
+PerceptionLM (PLM) is a family of open and fully reproducible models to facilitate research in vision-language modeling (VLM). In conjunction with PE, it is powerful enough to compete with the latest state-of-the-art VLMs such as InternVL3 and QwenVL2.5, while using _fully open data_. We also release the largest spatiotemporally annotated video dense captioning and fine-grained human activity recognition datasets to ever exist.
 
 ![Description of the image](apps/plm/docs/plm_main_fig.png)
 
+### Models
+PLM releases models in three different sizes (1B, 3B and 8B).
+* [Perception-LM-1B](https://huggingface.co/facebook/Perception-LM-1B): A PLM model trained using Llama-3.2-1B-Instruct base LLM.
+* [Perception-LM-3B](https://huggingface.co/facebook/Perception-LM-3B): A PLM model trained using Llama-3.2-3B-Instruct base LLM.
+* [Perception-LM-8B](https://huggingface.co/facebook/Perception-LM-8B): A PLM model trained using Llama-3.1-8B-Instruct base LLM.
 
-## PLM Image Benchmark Results
+### PLM Resources
+
+| Resource | Description | Documentation                                          |
+| --- | --- |--------------------------------------------------------|
+| **Evaluation** | Evaluation of PLM using lmms-eval | [`docs/evaluation.md`](apps/plm/docs/evaluation.md)    |
+| **Training / Finetuning** | Training and finetuning instructions for PLM | [`docs/training.md`](apps/plm/docs/training.md)                 |
+| **PLM-VideoBench** | Evaluation on PLM-VideoBench using lmms-eval | [`docs/plm_videobench.md`](apps/plm/docs/plm_videobench.md)     |
+| **End-to-End Finetuning Example** | End-to-end finetuning example on radiology images | [`docs/finetune_example.md`](apps/plm/docs/finetune_example.md) |
+| **Generating Response** | Generate responses using a trained model with `generate.py` | [`generate.py`](apps/plm/generate.py)                           |
+
+
+### PLM Image Benchmark Results
 
 | Model  | DocVQA | ChartQA | TextVQA | InfoQA | AI2D  | OCRBench | COCO | Nocap | Flickr | MMMU | VQAv2 | OKVQA | VizWiz | MME | SEED | BLINK | CVBench | RealWorldQA | VSR | POPE |
 |:---------:|:--------:|:---------:|:---------:|:--------:|:------:|:----------:|:------------:|:-------------:|:--------------:|:------:|:-------:|:--------:|:--------:|:-----:|:------:|:-------:|:----------:|:-------------:|:-----:|:------:|
@@ -105,7 +123,7 @@ PLM consists of a vision encoder with a small scale (<8B parameters) LLM decoder
 | PLM3B  | 93.8   | 84.3    | 84.3    | 74.6   | 90.9 | 830      | 144.9      | 126.5       | 98.0         | 41.2 | 84.3  | 66.8   | 64.0   | 1879| 78.5 | 55.4  | 81.4     | 72.4        | 80.4| 88.7 |
 | PLM8B  | 94.6   | 85.5    | 86.5    | 80.9   | 92.7 | 870      | 146.7      | 129.9       | 105.6        | 46.1 | 85.6  | 69.6   | 67.0   | 1989| 79.3 | 56.0  | 81.3     | 75.0        | 82.8| 89.9 |
 
-## PLM Video Benchmark Results
+### PLM Video Benchmark Results
 
 | Model  | VATEX                    | DREAM&nbsp;1K      | How2QA       | MVBench      | NExTQA      | PerceptionTest&nbsp;(test) | STAR       | TVQA       | VideoMME        | TVBench      | ActivityNetQA   | EgoSchema&nbsp;(test) | TemporalBench    | TOMATO     | MotionBench&nbsp;(dev) | TempCompass&nbsp;(MCQ) | CGBench&nbsp;(clue) | Charades&nbsp;STA   | VideoHallucer   | Halluc.&nbsp;EventHallusion |
 |:-------------:|:---------------------------:|:-----------------------:|:---------------------:|:-------------:|:-------------:|:--------------------------:|:----------:|:----------:|:----------------:|:-------------:|:--------------------:|:----------------------:|:---------------------:|:------------:|:------------------------:|:-----------------------:|:---------------------:|:-------------------:|:-------------------------------:|:--------------------------------:|
