@@ -4,7 +4,9 @@ This repo is the home to the state-of-the-art for image and video _perception_: 
 
 > [!TIP]
 > Click to Navigate!
+> 
 > [Perception Encoder](#perception-encoder-pe)
+> 
 > [Perception Language Model](#perception-language-model-plm)
 
 ## Updates 
