@@ -66,7 +66,7 @@ PE core performs particularly well on the _hard_ benchmarks such as ObjectNet an
 
 
 ## Perception Encoder: Language
-PE lang takes the strong language performance from the intermediate layers of PE core and aligns it to the end for use with large language models. We specifically tuned PE lang to be versatile for any multimodal langugage modeling use case, including using different language model decoders (e.g., Llama / Qwen) and using different eval settings (e.g., native res / tiling). PE lang performs particularly well on OCR and document tasks.
+PE lang takes the strong language performance from the intermediate layers of PE core and aligns it to the end for use with large language models. We specifically tuned PE lang to be versatile for any multimodal language modeling use case, including using different language model decoders (e.g., Llama / Qwen) and using different eval settings (e.g., native res / tiling). PE lang performs particularly well on OCR and document tasks.
 
 We release two PE Lang checkpoints. Here are their results benchmarked in the frozen encoder [PLM-8B](../plm/README.md) benchmark SFT using 448px _only_ (i.e., _with no tiling_) and Llama 3.1 8B as the decoder:
 
