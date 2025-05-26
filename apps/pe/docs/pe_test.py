@@ -29,7 +29,6 @@ AVAILABLE_SIGLIP_MODELS = [
     # SigLIP2
     "google/siglip2-base-patch16-224",
     "google/siglip2-base-patch16-256",
-    "google/siglip2-base-patch16-naflex",
     "google/siglip2-base-patch32-256",
     "google/siglip2-base-patch16-384",
     "google/siglip2-base-patch16-512",
@@ -41,21 +40,20 @@ AVAILABLE_SIGLIP_MODELS = [
     "google/siglip2-so400m-patch16-256",
     "google/siglip2-so400m-patch16-384",
     "google/siglip2-so400m-patch16-512",
-    "google/siglip2-so400m-patch16-naflex",
     "google/siglip2-giant-opt-patch16-256",
     "google/siglip2-giant-opt-patch16-384",
     # SigLIP
     "google/siglip-base-patch16-224",
     "google/siglip-base-patch16-256",
-    "google/siglip-base-patch16-256-multilingual",
     "google/siglip-base-patch16-384",
     "google/siglip-base-patch16-512",
     "google/siglip-large-patch16-256",
     "google/siglip-large-patch16-384",
     "google/siglip-so400m-patch14-224",
     "google/siglip-so400m-patch14-384",
-    "google/siglip-so400m-patch16-256-i18n",
 ]
+
+WDS_DATASETS = ['wds_cars', 'wds_cifar10', 'wds_country211', 'wds_dollar_street', 'wds_fairface', 'wds_fgvc_aircraft', 'wds_food101', 'wds_geode', 'wds_gtsrb', 'wds_imagenet-a', 'wds_imagenet-o', 'wds_imagenet-r', 'wds_imagenet_sketch', 'wds_imagenetv2', 'wds_inaturalist', 'wds_mnist', 'wds_objectnet', 'wds_renderedsst2', 'wds_stl10', 'wds_sun397', 'wds_utkface', 'wds_voc2007', 'wds_vtab-caltech101', 'wds_vtab-cifar100', 'wds_vtab-clevr_closest_object_distance', 'wds_vtab-clevr_count_all', 'wds_vtab-dtd', 'wds_vtab-eurosat', 'wds_vtab-flowers', 'wds_vtab-kitti_closest_vehicle_distance', 'wds_vtab-pcam', 'wds_vtab-pets', 'wds_vtab-resisc45', 'wds_vtab-svhn', 'wds_wilds-camelyon17', 'wds_wilds-fmow', 'wds_wilds-iwildcam']
 
 
 def parse_args(args):
@@ -109,16 +107,16 @@ else:
     raise ValueError(f"Not supported model: {model_name}!")
 
 
-# dataset_name = 'wds_fgvc-aircraft'
-# dataset_name = 'wds_cub-200'
-# dataset_name = 'imagenet1k'
-# dataset_name = args.dataset_name
 batch_size = args.bs
 num_workers = args.workers
-for dataset_name in ['wds_fgvc-aircraft', 'wds_cub-200', 'imagenet1k']:
+to_evaluate_datasets = ['wds_fgvc-aircraft', 'wds_cub-200', 'imagenet1k']
+# to_evaluate_datasets = WDS_DATASETS
+for dataset_name in to_evaluate_datasets:
     print(f"Run inference on {dataset_name}...")
     if dataset_name.startswith("wds"):
-        if dataset_name == 'wds_fgvc-aircraft':
+        if dataset_name in WDS_DATASETS:
+            data_root = f'/fsx-onevision/pengchuanzhang/datasets/pe_datasets/wds/{dataset_name}_test'
+        elif dataset_name == 'wds_fgvc-aircraft':
             data_root = '/fsx-onevision/pengchuanzhang/datasets/pe_datasets/wds/wds_fgvc-aircraft-sam3_test'
         elif dataset_name == 'wds_cub-200':
             data_root = '/fsx-onevision/pengchuanzhang/datasets/pe_datasets/wds/wds_cub-200-sam3_test'
