@@ -6,7 +6,7 @@ import torch
 from torchvision.datasets import ImageFolder
 import matplotlib.pyplot as plt
 from PIL import Image
-from transformers import AutoTokenizer, AutoModel
+import open_clip
 
 sys.path.append('../../../')
 sys.path.append('../')
@@ -27,33 +27,38 @@ from clip_benchmark.metrics import zeroshot_classification
 AVAILABLE_PE_MODELS = ['PE-Core-G14-448', 'PE-Core-L14-336', 'PE-Core-B16-224']
 AVAILABLE_SIGLIP_MODELS = [
     # SigLIP2
-    "google/siglip2-base-patch16-224",
-    "google/siglip2-base-patch16-256",
-    "google/siglip2-base-patch32-256",
-    "google/siglip2-base-patch16-384",
-    "google/siglip2-base-patch16-512",
-    "google/siglip2-large-patch16-256",
-    "google/siglip2-large-patch16-384",
-    "google/siglip2-large-patch16-512",
-    "google/siglip2-so400m-patch14-224",
-    "google/siglip2-so400m-patch14-384",
-    "google/siglip2-so400m-patch16-256",
-    "google/siglip2-so400m-patch16-384",
-    "google/siglip2-so400m-patch16-512",
-    "google/siglip2-giant-opt-patch16-256",
-    "google/siglip2-giant-opt-patch16-384",
-    # SigLIP
-    "google/siglip-base-patch16-224",
-    "google/siglip-base-patch16-256",
-    "google/siglip-base-patch16-384",
-    "google/siglip-base-patch16-512",
-    "google/siglip-large-patch16-256",
-    "google/siglip-large-patch16-384",
-    "google/siglip-so400m-patch14-224",
-    "google/siglip-so400m-patch14-384",
+    "ViT-B-32-SigLIP2-256",
+    "ViT-B-16-SigLIP2",
+    "ViT-B-16-SigLIP2-256",
+    "ViT-B-16-SigLIP2-384",
+    "ViT-B-16-SigLIP2-512",
+    "ViT-L-16-SigLIP2-256",
+    "ViT-L-16-SigLIP2-384",
+    "ViT-L-16-SigLIP2-512",
+    "ViT-SO400M-14-SigLIP2",
+    "ViT-SO400M-14-SigLIP2-378",
+    "ViT-SO400M-16-SigLIP2-256",
+    "ViT-SO400M-16-SigLIP2-384",
+    "ViT-SO400M-16-SigLIP2-512",
+    "ViT-gopt-16-SigLIP2-256",
+    "ViT-gopt-16-SigLIP2-384",
+    # SigLIPv1
+    'ViT-SO400M-14-SigLIP-384',
+    'ViT-B-16-SigLIP',
+    'ViT-B-16-SigLIP-256',
+    'ViT-B-16-SigLIP-i18n-256',
+    'ViT-B-16-SigLIP-384',
+    'ViT-B-16-SigLIP-512',
+    'ViT-L-16-SigLIP-256',
+    'ViT-L-16-SigLIP-384',
+    'ViT-SO400M-14-SigLIP',
+    'ViT-SO400M-14-SigLIP-384',
+    # other open_clip model
+    'ViT-B-32',
 ]
 
-WDS_DATASETS = ['wds_cars', 'wds_cifar10', 'wds_country211', 'wds_dollar_street', 'wds_fairface', 'wds_fgvc_aircraft', 'wds_food101', 'wds_geode', 'wds_gtsrb', 'wds_imagenet-a', 'wds_imagenet-o', 'wds_imagenet-r', 'wds_imagenet_sketch', 'wds_imagenetv2', 'wds_inaturalist', 'wds_mnist', 'wds_objectnet', 'wds_renderedsst2', 'wds_stl10', 'wds_sun397', 'wds_utkface', 'wds_voc2007', 'wds_vtab-caltech101', 'wds_vtab-cifar100', 'wds_vtab-clevr_closest_object_distance', 'wds_vtab-clevr_count_all', 'wds_vtab-dtd', 'wds_vtab-eurosat', 'wds_vtab-flowers', 'wds_vtab-kitti_closest_vehicle_distance', 'wds_vtab-pcam', 'wds_vtab-pets', 'wds_vtab-resisc45', 'wds_vtab-svhn', 'wds_wilds-camelyon17', 'wds_wilds-fmow', 'wds_wilds-iwildcam']
+# WDS_DATASETS = ['wds_cars', 'wds_cifar10', 'wds_country211', 'wds_dollar_street', 'wds_fairface', 'wds_fgvc_aircraft', 'wds_food101', 'wds_geode', 'wds_gtsrb', 'wds_imagenet-a', 'wds_imagenet-o', 'wds_imagenet-r', 'wds_imagenet_sketch', 'wds_imagenetv2', 'wds_inaturalist', 'wds_mnist', 'wds_objectnet', 'wds_renderedsst2', 'wds_stl10', 'wds_sun397', 'wds_utkface', 'wds_voc2007', 'wds_vtab-caltech101', 'wds_vtab-cifar100', 'wds_vtab-clevr_closest_object_distance', 'wds_vtab-clevr_count_all', 'wds_vtab-dtd', 'wds_vtab-eurosat', 'wds_vtab-flowers', 'wds_vtab-kitti_closest_vehicle_distance', 'wds_vtab-pcam', 'wds_vtab-pets', 'wds_vtab-resisc45', 'wds_vtab-svhn', 'wds_wilds-camelyon17', 'wds_wilds-fmow', 'wds_wilds-iwildcam']
+WDS_DATASETS = ['wds_inaturalist', 'wds_mnist', 'wds_objectnet', 'wds_renderedsst2', 'wds_stl10', 'wds_sun397', 'wds_utkface', 'wds_voc2007', 'wds_vtab-caltech101', 'wds_vtab-cifar100', 'wds_vtab-clevr_closest_object_distance', 'wds_vtab-clevr_count_all', 'wds_vtab-dtd', 'wds_vtab-eurosat', 'wds_vtab-flowers', 'wds_vtab-kitti_closest_vehicle_distance', 'wds_vtab-pcam', 'wds_vtab-pets', 'wds_vtab-resisc45', 'wds_vtab-svhn', 'wds_wilds-camelyon17', 'wds_wilds-fmow', 'wds_wilds-iwildcam']
 
 
 def parse_args(args):
@@ -97,12 +102,10 @@ if model_name in AVAILABLE_PE_MODELS:
     preprocess = transforms.get_image_transform(model.image_size)
     tokenizer = transforms.get_text_tokenizer(model.context_length)
 elif model_name in AVAILABLE_SIGLIP_MODELS:
-    model = AutoModel.from_pretrained(model_name)
+    model, _, preprocess = open_clip.create_model_and_transforms(model_name, pretrained='laion2b_s34b_b79k')
     model = model.to(device)
-
-    image_size = int(model_name.split('-')[-1])
-    preprocess = transforms.get_image_transform(image_size, to_RGB=False)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model.eval()  # model in train mode by default, impacts some models with BatchNorm or stochastic depth active
+    tokenizer = open_clip.get_tokenizer(model_name)
 else:
     raise ValueError(f"Not supported model: {model_name}!")
 
