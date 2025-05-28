@@ -1,0 +1,1 @@
+{"dataset": "wds/wds_imagenet1k", "model": "hf-hub:timm/ViT-L-16-SigLIP2-384", "pretrained": "laion400m_e32", "task": "zeroshot_classification", "metrics": {"acc1": 0.83244, "acc5": 0.971, "mean_per_class_recall": 0.8324400000000001}, "language": "en", "name": ""}

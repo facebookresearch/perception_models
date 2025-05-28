@@ -566,12 +566,18 @@ def run(args):
         model, transform, collate_fn, dataloader = None, None, None, None
     else:
         model_name = args.model
-        model = pe.CLIP.from_config(model_name, pretrained=True)  # Downloads from HF
+        if 'PE' in model_name:
+            model = pe.CLIP.from_config(model_name, pretrained=True)  # Downloads from HF
+            transform = transforms.get_image_transform(model.image_size)
+            tokenizer = transforms.get_text_tokenizer(model.context_length)
+        elif 'SigLIP' in model_name:
+            import open_clip
+            model, transform = open_clip.create_model_from_pretrained(args.model)
+            tokenizer = open_clip.get_tokenizer(args.model)
+        else:
+            raise NotImplementedError()
+
         model = model.cuda()
-
-        transform = transforms.get_image_transform(model.image_size)
-        tokenizer = transforms.get_text_tokenizer(model.context_length)
-
         model.eval()
 
         dataset = build_dataset(
