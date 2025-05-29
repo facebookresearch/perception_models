@@ -6,7 +6,8 @@ from core.vision_encoder.tokenizer import SimpleTokenizer
 def get_image_transform(
     image_size: int,
     center_crop: bool = False,
-    interpolation: T.InterpolationMode = T.InterpolationMode.BILINEAR  # We used bilinear during training
+    interpolation: T.InterpolationMode = T.InterpolationMode.BILINEAR,  # We used bilinear during training
+    to_RGB: bool = True
 ):
     if center_crop:
         crop = [
@@ -20,7 +21,7 @@ def get_image_transform(
         ]
     
     return T.Compose(crop + [
-        T.Lambda(lambda x: x.convert("RGB")),
+        T.Lambda(lambda x: x.convert("RGB") if to_RGB else x),
         T.ToTensor(),
         T.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5], inplace=True),
     ])

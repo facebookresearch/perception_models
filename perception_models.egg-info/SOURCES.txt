@@ -1,0 +1,8 @@
+LICENSE.PE
+LICENSE.PLM
+README.md
+setup.py
+perception_models.egg-info/PKG-INFO
+perception_models.egg-info/SOURCES.txt
+perception_models.egg-info/dependency_links.txt
+perception_models.egg-info/top_level.txt

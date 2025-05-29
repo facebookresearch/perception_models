@@ -1,16 +1,3 @@
 # image classification
-wds/wds_imagenet1k
-wds/wds_imagenetv2
-wds/wds_imagenet-a
-wds/wds_imagenet-r
-wds/wds_imagenet_sketch
-
-# image retrieval 
-wds/wds_mscoco_captions
-wds/wds_flickr30k
-
-# video classification
-k400_val
-
-# video retrieval
-msrvtt
+wds/wds_cub-200-sam3_test
+wds/wds_fgvc-aircraft-sam3_test
