@@ -1,0 +1,19 @@
+Metadata-Version: 2.4
+Name: perception_models
+Version: 1.0.0
+Summary: Occhi package.
+Home-page: https://github.com/facebookresearch/perception_models
+Author: Meta AI Research, FAIR
+License: FAIR Noncommercial Research License
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: Other/Proprietary License
+Requires-Python: >=3.10
+License-File: LICENSE.PE
+License-File: LICENSE.PLM
+Dynamic: author
+Dynamic: classifier
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-python
+Dynamic: summary

@@ -55,8 +55,13 @@ def zero_shot_classifier(model, tokenizer, classnames, templates, device, amp=Tr
                 texts = [template.format(c=classname) for template in templates]
             else:
                 raise ValueError("templates must be a list or a dict")
-            texts = tokenizer(texts).to(device)  # tokenize
-            class_embeddings = model.encode_text(texts)
+            if hasattr(model, 'encode_text'):
+                texts = tokenizer(texts).to(device)  # tokenize
+                class_embeddings = model.encode_text(texts)
+            else:
+                # siglip
+                texts = tokenizer(texts, padding=True, truncation=True, return_tensors="pt").to(device)  # tokenize
+                class_embeddings = model.text_model(**texts).pooler_output
             class_embedding = F.normalize(class_embeddings, dim=-1).mean(dim=0)
             class_embedding /= class_embedding.norm()
             zeroshot_weights.append(class_embedding)
@@ -139,7 +144,11 @@ def run_classification(
                 if video_dataset:
                     image_features = model.encode_video(images)
                 else:
-                    image_features = model.encode_image(images)
+                    if hasattr(model, 'encode_image'):
+                        image_features = model.encode_image(images)
+                    else:
+                        # siglip models
+                        image_features = model.vision_model(pixel_values=images).pooler_output
 
                 image_features = F.normalize(image_features, dim=-1)
                 logits = 100.0 * image_features @ classifier
