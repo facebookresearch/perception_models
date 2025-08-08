@@ -40,7 +40,7 @@ def get_image_transform(
         )
 
     logger.info(
-        f"Initalized transforms with: vision_input_type: '{vision_input_type}' and max_num_tiles: {max_num_tiles}."
+        f"Initialized transforms with: vision_input_type: '{vision_input_type}' and max_num_tiles: {max_num_tiles}."
     )
 
     return transforms
@@ -364,7 +364,7 @@ class VariableSizeImageTransform(object):
                                 optimal_canvas = (n_w, n_h)
                                 optimal_image_width_height = image_width_height
                     else:
-                        # NOTE: L3V dynamid tiling. Priortize biggest canvas.
+                        # NOTE: L3V dynamic tiling. Prioritize biggest canvas.
                         if (
                             scale < 1.0
                             and (image_width_height[0] >= optimal_image_width_height[0])
