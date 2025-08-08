@@ -421,7 +421,7 @@ class PersistentDataLoader:
     Also keeps the dataloader iterator and the epoch iterator separate, so that the dataloader workers are persistent.
 
     Also laughs in the face of torch when it tries to kill the whole job because a worker died. Instead, this dataloader
-    will just gracefully restart the underlying iterator and correpsonding workers, while additionally loading the state dict
+    will just gracefully restart the underlying iterator and corresponding workers, while additionally loading the state dict
     so that it resumes from where it left off.
 
     This may or may not be a good idea.
