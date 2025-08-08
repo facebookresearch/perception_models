@@ -12,7 +12,6 @@ from functools import lru_cache, partial
 from typing import Callable, List, Optional, Union
 
 import ftfy
-import numpy as np
 import regex as re
 import torch
 
