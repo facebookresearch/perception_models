@@ -154,7 +154,7 @@ def read_jsonl(
         file_path (str): Path to the JSONL file.
         position (int): The file position (in bytes) from which to start reading.
         block_size (int): The number of lines to skip between yields
-        offset (int): The initial number of lines skiped
+        offset (int): The initial number of lines skipped
 
     Yields:
         JSONLState: Represents the state of each line read according to window and offset.
