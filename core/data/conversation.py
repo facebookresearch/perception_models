@@ -93,7 +93,7 @@ class Conversation:
                     f"conv['from'] must be human or assistant, but got {conv['from']}."
                     "Please fix your jsonl file."
                 )
-        # Add bos and eos token at the start and end of the coversation (TODO (Maaz): Is there a better way to do it?)
+        # Add bos and eos token at the start and end of the conversation (TODO (Maaz): Is there a better way to do it?)
         conv_dict_list[0]["user"] = f"{self.bos_token}{conv_dict_list[0]['user']}"
         conv_dict_list[-1][
             "assistant"
