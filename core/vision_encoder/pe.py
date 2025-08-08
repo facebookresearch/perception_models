@@ -107,7 +107,7 @@ class SelfAttention(nn.Module):
             self.head_dim * num_heads == self.embed_dim
         ), "embed_dim must be divisible by num_heads"
 
-        # To make this compatibile with nn.MultiHeadAttention
+        # To make this compatible with nn.MultiHeadAttention
         self.in_proj_weight = Parameter(torch.empty(3 * embed_dim, embed_dim))
         self.in_proj_bias = Parameter(torch.empty(3 * embed_dim))
         self.out_proj = nn.Linear(embed_dim, embed_dim, bias=True)
