@@ -1,0 +1,11 @@
+einops
+ftfy
+numpy
+omegaconf
+pillow
+sentencepiece
+tiktoken
+timm
+torchcodec
+torchdata
+viztracer

@@ -1,0 +1,6 @@
+decord
+opencv-python
+pycocoevalcap
+scikit-learn
+scipy
+webdataset

@@ -12,7 +12,11 @@ from typing import Any, Dict, List, Optional, Union
 import torch
 import torch.distributed as dist
 import torch.nn as nn
-import wandb
+try:
+    import wandb
+except:
+    logging.warning("wandb not installed, skipping wandb logging.")
+    wandb = None
 
 from core.distributed import get_is_master
 
@@ -66,6 +70,7 @@ class MetricLogger:
         if self.jsonl_writer is None:
             self.jsonl_writer = open(self.outdir, "a")
         if (
+            wandb and
             self.args is not None
             and self.args.logging.wandb is not None
             and get_is_master()
@@ -77,6 +82,7 @@ class MetricLogger:
 
     def log(self, metrics: Dict[str, Any]):
         if (
+            wandb and
             self.args is not None
             and self.args.logging.wandb is not None
             and (wandb.run is not None)
@@ -189,6 +195,8 @@ class GPUMemoryMonitor:
 def upload_train_to_wandb(
     ckpt_dir, project="perception", entity="codegen-team", train=True, eval=True
 ):
+    if not wandb:
+        return
     import json
     from pathlib import Path
 
