@@ -5,7 +5,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="perception_models",
-    version="1.0.0.dev2",
+    version="1.0.0.dev3",
     author="Meta AI Research, FAIR",
     description="Models of the Perception family.",
     url="https://github.com/facebookresearch/perception_models",
