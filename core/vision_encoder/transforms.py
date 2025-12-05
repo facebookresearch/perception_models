@@ -20,12 +20,14 @@ def get_image_transform(
         ]
     
     return T.Compose(crop + [
-        T.Lambda(lambda x: x.convert("RGB")),
+        T.Lambda(_to_rgb),
         T.ToTensor(),
         T.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5], inplace=True),
     ])
 
-
+# Top-level, picklable equivalent of: lambda x: x.convert("RGB")
+def _to_rgb(img):
+    return img.convert("RGB")
 
 def get_text_tokenizer(context_length: int):
     return SimpleTokenizer(context_length=context_length)
