@@ -1,15 +1,15 @@
 # Perception Encoder (PE)
 
-[![Paper](https://img.shields.io/badge/Paper-Perception%20Encoder-b31b1b.svg)](https://ai.meta.com/research/publications/perception-encoder-the-best-visual-embeddings-are-not-at-the-output-of-the-network) 
+[![Paper](https://img.shields.io/badge/Paper-Perception%20Encoder-b31b1b.svg)](https://ai.meta.com/research/publications/perception-encoder-the-best-visual-embeddings-are-not-at-the-output-of-the-network)
 [![Paper](https://img.shields.io/badge/arXiv-2504.13181-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2504.13181)
 [![Hugging Face Collection](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Collection-blue)](https://huggingface.co/collections/facebook/perception-encoder-67f977c9a65ca5895a7f6ba1)
 [![Colab Demo](https://img.shields.io/static/v1?label=Demo&message=Google%20Colab&logo=google&color=orange)](https://colab.research.google.com/github/facebookresearch/perception_models/blob/main/apps/pe/docs/pe_demo.ipynb)
 [![Model License](https://img.shields.io/badge/Model_License-Apache_2.0-olive)](https://opensource.org/licenses/Apache-2.0)
 
-This is the official implementation of **Perception Encoder** from our paper:  
-**[Perception Encoder: The best visual embeddings are hidden inside the network](https://ai.meta.com/research/publications/perception-encoder-the-best-visual-embeddings-are-not-at-the-output-of-the-network)**  
-Daniel Bolya*, Po-Yao Huang*, Peize Sun*, Jang Hyun Cho*, Andrea Madotto*, Chen Wei, Tengyu Ma, Jiale Zhi, Jathushan Rajasegaran, Hanoona Rasheed, Junke Wang, Marco Monteiro, Hu Xu, Shiyu Dong, Nikhila Ravi, Daniel Li, Piotr Dollár, Christoph Feichtenhofer  
-\* Joint First Author  
+This is the official implementation of **Perception Encoder** from our paper:
+**[Perception Encoder: The best visual embeddings are hidden inside the network](https://ai.meta.com/research/publications/perception-encoder-the-best-visual-embeddings-are-not-at-the-output-of-the-network)**
+Daniel Bolya*, Po-Yao Huang*, Peize Sun*, Jang Hyun Cho*, Andrea Madotto*, Chen Wei, Tengyu Ma, Jiale Zhi, Jathushan Rajasegaran, Hanoona Rasheed, Junke Wang, Marco Monteiro, Hu Xu, Shiyu Dong, Nikhila Ravi, Daniel Li, Piotr Dollár, Christoph Feichtenhofer
+\* Joint First Author
 _[HuggingFace](https://huggingface.co/collections/facebook/perception-encoder-67f977c9a65ca5895a7f6ba1)_ | _[Blog](https://ai.meta.com/blog/meta-fair-updates-perception-localization-reasoning)_ | _[GitHub](https://github.com/facebookresearch/perception_models)_ | _[arXiv](https://arxiv.org/abs/2504.13181)_ | _[BibTeX](#citation)_
 
 <img src="docs/assets/teaser.png" style="width: 90%; margin: 0 auto; display: block;" />
@@ -87,12 +87,12 @@ Here is a sample of the performance obtainable by using PE lang G tuned further 
 
 |    | Model | Encoder | Doc VQA (test) | InfoQA (test) | TextVQA | MVBench | PerceptionTest (test) | EgoSchema (test) |
 |:--:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| 🆕 | PLM-3B | [PE-Lang-L14-448-Tiling](https://huggingface.co/facebook/PE-Lang-L14-448-Tiling)* | 93.8 | 74.6 | 84.3 | 74.7 | 79.3 | 66.9 | 
-| 🆕 | PLM-8B | [PE-Lang-G14-448-Tiling](https://huggingface.co/facebook/PE-Lang-G14-448-Tiling)* | 94.6 | 80.9 | 86.5 | 77.1 | 82.7 | 68.8 | 
+| 🆕 | PLM-3B | [PE-Lang-L14-448-Tiling](https://huggingface.co/facebook/PE-Lang-L14-448-Tiling)* | 93.8 | 74.6 | 84.3 | 74.7 | 79.3 | 66.9 |
+| 🆕 | PLM-8B | [PE-Lang-G14-448-Tiling](https://huggingface.co/facebook/PE-Lang-G14-448-Tiling)* | 94.6 | 80.9 | 86.5 | 77.1 | 82.7 | 68.8 |
 
 \* These checkpoints were aligned with tiling. Use them if you use higher than 448 resolution with tiling in the LLM decoder.
 
-See the paper for full performance evaluations and fair comparisons to other models. 
+See the paper for full performance evaluations and fair comparisons to other models.
 
 
 
@@ -103,7 +103,7 @@ And despite being a short finetuning step using PE core's intermediate layers as
 
 <img src="docs/assets/spatial_features.png" style="width: 80%; margin: 0 auto; padding-top: 20px; padding-bottom: 20px; display: block;" />
 
-PE spatial also has nuanced semantic correspondences between objects thanks to its CLIP pretraining. Here we show again PCA but only for the tokens not masked. PE spatial shows correspondence between parts like the first image cats' heads, backs, and legs. Additionally, PE spatial can show more nuanced correspondences like for the last two images, where the red/blue directions still denote parts, but the lightness/darkness directions now indicate semantics (i.e., dog/cat breed):  
+PE spatial also has nuanced semantic correspondences between objects thanks to its CLIP pretraining. Here we show again PCA but only for the tokens not masked. PE spatial shows correspondence between parts like the first image cats' heads, backs, and legs. Additionally, PE spatial can show more nuanced correspondences like for the last two images, where the red/blue directions still denote parts, but the lightness/darkness directions now indicate semantics (i.e., dog/cat breed):
 
 <img src="docs/assets/spatial_correspondence.png" style="width: 80%; margin: 0 auto; padding-top: 20px; padding-bottom: 20px; display: block;" />
 
@@ -140,7 +140,7 @@ Then download a model using one of the above checkpoint links.
 ## Examples
 Here are some examples about how to use the models. More coming soon!
 
-### 1. PE core CLIP Image / Text Feature Extraction 
+### 1. PE core CLIP Image / Text Feature Extraction
 Perception Encoder follows the same structure as [open_clip](https://github.com/mlfoundations/open_clip). You can use the following example for image and language feature extraction.
 
 ```python
@@ -201,8 +201,74 @@ print(out.shape)
 # torch.Size([1, 1024, 1024])
 ```
 
+### 4. PE-AV embedding
+
+```python
+import os
+from core.audio_visual_encoder import PEAudioVisual, PEAudioVisualTransform
+import torch
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = PEAudioVisual.from_config("pe-av-large", pretrained=True).to(device)
+transform = PEAudioVisualTransform.from_config("pe-av-large")
+
+video_files = ["assets/train.mp4", "assets/office.mp4"]
+descriptions = [
+    "A person talking with sirens and a train in the background",
+    "Two people talking in an office, with sounds of workers typing on a keyboard"
+]
+
+def embed(videos=None, audio=None, text=None):
+    inputs = transform(videos=videos, audio=audio, text=text)
+    inputs = inputs.to(device)
+    with torch.inference_mode(), torch.autocast(device.type, dtype=torch.bfloat16):
+        return model(**inputs)
+
+vt_outputs = embed(videos=video_files, text=descriptions)
+avt_outputs = embed(videos=video_files, audio=video_files, text=descriptions)
+at_outputs = embed(audio=video_files, text=descriptions)
+
+# Compute dot product between visual and text
+vt_dot_products = torch.einsum("ij,ij->i", vt_outputs.visual_embeds, vt_outputs.visual_text_embeds)
+# Compute dot product between audio_visual and text
+avt_dot_products = torch.einsum("ij,ij->i", avt_outputs.audio_visual_embeds, avt_outputs.audio_visual_text_embeds)
+# Compute dot product between audio and text
+at_dot_products = torch.einsum("ij,ij->i", at_outputs.audio_embeds, at_outputs.audio_text_embeds)
+# Compute dot product between audio and video
+av_dot_products = torch.einsum("ij,ij->i", avt_outputs.audio_embeds, avt_outputs.video_embeds)
+```
+
+### 5. PE-A Frame audio event localization
+
+```python
+from core.audio_visual_encoder import (
+    PEAudioFrame,
+    PEAudioFrameTransform,
+)
+import torch
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = PEAudioFrame.from_config("pe-a-frame-large", pretrained=True).to(device)
+transform = PEAudioFrameTransform.from_config("pe-a-frame-large")
+
+descriptions = ["a person talking"]
+inputs = transform(
+    audio=["assets/office.mp4"],
+    text=descriptions,
+).to(device)
+
+with torch.inference_mode():
+    outputs = model(**inputs)
+
+# Print the spans for each description (start and end timestamps for when they occur in the audio)
+for description, spans in zip(descriptions, outputs.spans):
+    span_str = ", ".join([f"({start:.2f}, {end:.2f})" for start, end in spans])
+    print(f'"{description}": [{span_str}]')
+
+```
+
 ## Acknowledgement 🙏
-We are thankful to [Open_CLIP](https://github.com/mlfoundations/open_clip) for open-source contributions in CLIP training, and [CLIP_benchmark](https://github.com/LAION-AI/CLIP_benchmark) for CLIP model inference and evaluation. The PE code structure and implementation follow Open_CLIP, and this evaluation is based on CLIP_benchmark. 
+We are thankful to [Open_CLIP](https://github.com/mlfoundations/open_clip) for open-source contributions in CLIP training, and [CLIP_benchmark](https://github.com/LAION-AI/CLIP_benchmark) for CLIP model inference and evaluation. The PE code structure and implementation follow Open_CLIP, and this evaluation is based on CLIP_benchmark.
 
 
 ## License
