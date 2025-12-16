@@ -4,7 +4,7 @@
 [![Hugging Face Collection](https://img.shields.io/badge/%F0%9F%A4%97%20PLM&#160;3B-Model-blue)](https://huggingface.co/facebook/Perception-LM-3B)
 [![Hugging Face Collection](https://img.shields.io/badge/%F0%9F%A4%97%20PLM&#160;8B-Model-blue)](https://huggingface.co/facebook/Perception-LM-8B) 
 
-We have added our model and benchmarks to [`lmms-eval`](https://github.com/EvolvingLMMs-Lab/lmms-eval/blob/main/lmms_eval/models/plm.py) for to support the process of reproducing our reported results on multiple image and video benchmarks.
+We have added our model and benchmarks to [`lmms-eval`](https://github.com/EvolvingLMMs-Lab/lmms-eval/blob/main/lmms_eval/models/simple/plm.py) for to support the process of reproducing our reported results on multiple image and video benchmarks.
 
 ---
 

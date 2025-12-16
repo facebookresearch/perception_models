@@ -5,12 +5,15 @@ This repo is the home to the state-of-the-art for image and video _perception_: 
 
 > [!TIP]
 > Click to Navigate!
-> 
+>
 > [Perception Encoder](#perception-encoder-pe)
-> 
+>
 > [Perception Language Model](#perception-language-model-plm)
+>
+> [Dataset Releases](#dataset-releases)
 
-## Updates 
+## Updates
+* **[Dec-16-25]:** We have released the Perception Encoder Audio-Visual (PE-AV) and Perception Encoder Audio-Frame (PE-A-Frame) models [[paper](TODO: add arxiv link)] :fire::fire:
 * **[Jul-14-25]:** PerceptionLM is now available in [Hugging Face transformers](https://huggingface.co/docs/transformers/main/en/model_doc/perception_lm). :fire::fire:
 * **[Jul-11-25]:** We have release 8 new checkpoints for [Perception Encoder](apps/pe/README.md): 2x small core models (T and S), 2x tiling-tuned lang models (G and L), and 4x smaller spatial models (L, B, S, T). Give them a try! :fire::fire::fire:
 * **[May-28-25]:** Perception Encoder has been integrated into [timm](https://github.com/huggingface/pytorch-image-models)! :fire::fire:
@@ -19,14 +22,14 @@ This repo is the home to the state-of-the-art for image and video _perception_: 
 
 
 ## Perception Encoder (PE)
-
+[![Data](https://img.shields.io/badge/Download-PE%20Data-ffcc00.svg)](https://huggingface.co/datasets/facebook/PE-Video)
 [![Hugging Face Collection](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Collection-blue)](https://huggingface.co/collections/facebook/perception-encoder-67f977c9a65ca5895a7f6ba1)
 [![Paper](https://img.shields.io/badge/Technical%20Report-Perception%20Encoder-b31b1b.svg)](https://ai.meta.com/research/publications/perception-encoder-the-best-visual-embeddings-are-not-at-the-output-of-the-network)
 [![Paper](https://img.shields.io/badge/arXiv-2504.13181-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2504.13181)
 [![Colab Demo](https://img.shields.io/static/v1?label=Demo&message=Google%20Colab&logo=google&color=orange)](https://colab.research.google.com/github/facebookresearch/perception_models/blob/main/apps/pe/docs/pe_demo.ipynb)
 [![Model License](https://img.shields.io/badge/Model_License-Apache_2.0-olive)](https://opensource.org/licenses/Apache-2.0)
 
-[Perception Encoder (PE)](https://arxiv.org/abs/2504.13181) is a family of the state-of-the-art vision encoders for encoding images and video: PE core outperforms SigLIP2 on image and InternVideo2 on video bencmarks; PE lang can be used to outperform QwenVL2.5 and InternVL3 on vision language modeling; and PE spatial outperforms DINOv2 on dense prediction tasks. And all of this follows the same, easily scalable contrastive pretraining. Please see [README](apps/pe/README.md) for more details.
+[Perception Encoder (PE)](https://arxiv.org/abs/2504.13181) is a family of the state-of-the-art vision encoders for encoding images and video: PE core outperforms SigLIP2 on image and InternVideo2 on video benchmarks; PE lang can be used to outperform QwenVL2.5 and InternVL3 on vision language modeling; and PE spatial outperforms DINOv2 on dense prediction tasks. And all of this follows the same, easily scalable contrastive pretraining. Please see [README](apps/pe/README.md) for more details.
 
 <img src="apps/pe/docs/assets/teaser.png" style="width: 100%; margin: 0 auto; display: block;" />
 
@@ -35,6 +38,7 @@ PE has 3 types of checkpoints, each excelling in a different area of computer vi
  - [PE core](#perception-encoder-core): a CLIP model excels in vision-language tasks such as zero-shot image and video classification and video retrieval.
  - [PE lang](#perception-encoder-language): a LLM-aligned PE that powers [PLM)](https://arxiv.org/abs/2504.13180) to compete at the forefront of multimodal LLM benchmarks.
  - [PE spatial](#perception-encoder-spatial): a spatially tuned PE that outperforms best spatial models for vision-centric tasks such as detection, depth estimation, and tracking.
+ - [PE audio-visual](#perception-encoder-audio-visual): a CLIP Model that embeds audio, video, audio-video, and text into a joint embedding space.
 
 #### Vision-Language Benchmarks
 |    | Model | Checkpoint | IN-1k | IN-v2 | IN-A | ObjectNet | COCO-T2I | Kinetics-400 | VTT-T2V
@@ -57,8 +61,8 @@ PE has 3 types of checkpoints, each excelling in a different area of computer vi
 🔥 SotA Setting:
 |    | Model | Encoder | Doc VQA (test) | InfoQA (test) | TextVQA | MVBench | PerceptionTest (test) | EgoSchema (test) |
 |:--:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| 🆕 | PLM-3B | [PE-Lang-L14-448-Tiling](https://huggingface.co/facebook/PE-Lang-L14-448-Tiling)* | 93.8 | 74.6 | 84.3 | 74.7 | 79.3 | 66.9 | 
-| 🆕 | PLM-8B | [PE-Lang-G14-448-Tiling](https://huggingface.co/facebook/PE-Lang-G14-448-Tiling)* | 94.6 | 80.9 | 86.5 | 77.1 | 82.7 | 68.8 | 
+| 🆕 | PLM-3B | [PE-Lang-L14-448-Tiling](https://huggingface.co/facebook/PE-Lang-L14-448-Tiling)* | 93.8 | 74.6 | 84.3 | 74.7 | 79.3 | 66.9 |
+| 🆕 | PLM-8B | [PE-Lang-G14-448-Tiling](https://huggingface.co/facebook/PE-Lang-G14-448-Tiling)* | 94.6 | 80.9 | 86.5 | 77.1 | 82.7 | 68.8 |
 
 \* These checkpoints were aligned with tiling. Use them if you use higher than 448 resolution with tiling in the LLM decoder.
 
@@ -84,6 +88,25 @@ PE has 3 types of checkpoints, each excelling in a different area of computer vi
 | 🆕 | **L/14** 448px | [PE-Spatial-L14-448](https://huggingface.co/facebook/PE-Spatial-L14-448) | 48.1 | 60.6 |
 
 See paper for comparison to other models.
+
+#### Audio-Visual Benchmarks
+
+| Model        | Avg Retrieval | AudioCaps T→A | AudioCaps T→V | AudioCaps V→A | Clotho T→A | Valor T→A | Valor T→V | VCTK A→T | VGGSound V→A | Internal V→A |
+|--------------|---------------|---------------|---------------|---------------|------------|-----------|-----------|----------|---------------|---------------|
+| [`pe-av-small-16-frame`](https://huggingface.co/facebook/pe-av-small-16-frame)  | 45.2          | 41.2          | 18.6          | 75.4          | 24.0       | 29.8      | 70.1      | 96.1     | 34.1          | 17.9          |
+| [`pe-av-base-16-frame`](https://huggingface.co/facebook/pe-av-base-16-frame)   | 47.0          | 43.1          | 19.8          | 80.6          | 23.4       | 31.9      | 70.0      | 94.8     | 39.0          | 20.4          |
+| [`pe-av-large-16-frame`](https://huggingface.co/facebook/pe-av-large-16-frame)  | 48.2          | 44.7          | 19.5          | 86.1          | 22.8       | 35.0      | 70.9      | 85.6     | 45.2          | 23.9          |
+| [`pe-av-small`](https://huggingface.co/facebook/pe-av-small)           | 48.1          | 41.8          | 18.8          | 77.4          | 23.9       | 29.3      | 70.9      | 94.9     | 35.4          | 40.5          |
+| [`pe-av-base`](https://huggingface.co/facebook/pe-av-base)            | 50.2          | 42.7          | 19.6          | 83.7          | 23.8       | 30.8      | 71.2      | 94.9     | 40.7          | 44.6          |
+| [`pe-av-large`](https://huggingface.co/facebook/pe-av-large)           | 51.6          | 45.8          | 20.8          | 88.3          | 23.0       | 35.1      | 70.9      | 85.6     | 48.3          | 46.5          |
+
+#### Audio Event Localization Benchmarks
+
+|                  | Internal Bench (AUROC)      | ASFX-SED (AUROC)        | AudioSet-Strong (AUROC) | DESED (AUROC) | UrbanSED (AUROC) |
+|------------------|---------------------|------------------|-----------------------|-------------|-------------|
+| [`pe-a-frame-small`](https://huggingface.co/facebook/pe-a-frame-small)| 0.91                | 0.83             | 0.96                  | 0.96        | 0.88        |
+| [`pe-a-frame-base`](https://huggingface.co/facebook/pe-a-frame-base)| 0.92                | 0.83             | 0.96                  | 0.98        | 0.89        |
+| [`pe-a-frame-large`](https://huggingface.co/facebook/pe-a-frame-large)| 0.91                | 0.83             | 0.96                  | 0.97        | 0.89        |
 
 ### Getting Started with PE
 You can get started with the following example for image and text feature extraction or use our [Colab Demo](https://colab.research.google.com/github/facebookresearch/perception_models/blob/main/apps/pe/docs/pe_demo.ipynb)
@@ -116,8 +139,77 @@ print("Label probs:", text_probs)  # prints: [[0.0, 0.0, 1.0]]
 > [!TIP]
 > See [`apps/pe/README.md`](apps/pe/README.md) for details and how to get started!
 
+### Getting Started with PE-AV
+
+```python
+import os
+from core.audio_visual_encoder import PEAudioVisual, PEAudioVisualTransform
+import torch
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = PEAudioVisual.from_config("pe-av-large", pretrained=True).to(device)
+transform = PEAudioVisualTransform.from_config("pe-av-large")
+
+video_files = ["assets/train.mp4", "assets/office.mp4"]
+descriptions = [
+    "A person talking with sirens and a train in the background",
+    "Two people talking in an office, with sounds of workers typing on a keyboard"
+]
+
+def embed(videos=None, audio=None, text=None):
+    inputs = transform(videos=videos, audio=audio, text=text)
+    inputs = inputs.to(device)
+    with torch.inference_mode(), torch.autocast(device.type, dtype=torch.bfloat16):
+        return model(**inputs)
+
+vt_outputs = embed(videos=video_files, text=descriptions)
+avt_outputs = embed(videos=video_files, audio=video_files, text=descriptions)
+at_outputs = embed(audio=video_files, text=descriptions)
+
+# Compute dot product between visual and text
+vt_dot_products = torch.einsum("ij,ij->i", vt_outputs.visual_embeds, vt_outputs.visual_text_embeds)
+# Compute dot product between audio_visual and text
+avt_dot_products = torch.einsum("ij,ij->i", avt_outputs.audio_visual_embeds, avt_outputs.audio_visual_text_embeds)
+# Compute dot product between audio and text
+at_dot_products = torch.einsum("ij,ij->i", at_outputs.audio_embeds, at_outputs.audio_text_embeds)
+# Compute dot product between audio and video
+av_dot_products = torch.einsum("ij,ij->i", avt_outputs.audio_embeds, avt_outputs.video_embeds)
+```
+
+### Getting Started with PE-A-Frame
+
+```python
+from core.audio_visual_encoder import (
+    PEAudioFrame,
+    PEAudioFrameTransform,
+)
+import torch
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = PEAudioFrame.from_config("pe-a-frame-large", pretrained=True).to(device)
+transform = PEAudioFrameTransform.from_config("pe-a-frame-large")
+
+descriptions = ["a person talking"]
+inputs = transform(
+    audio=["assets/office.mp4"],
+    text=descriptions,
+).to(device)
+
+with torch.inference_mode():
+    outputs = model(**inputs)
+
+# Print the spans for each description (start and end timestamps for when they occur in the audio)
+for description, spans in zip(descriptions, outputs.spans):
+    span_str = ", ".join([f"({start:.2f}, {end:.2f})" for start, end in spans])
+    print(f'"{description}": [{span_str}]')
+
+```
+
+> [!TIP]
+> See [`apps/pe/README.md`](apps/pe/README.md) for additional details!
 
 ## Perception Language Model (PLM)
+[![Data](https://img.shields.io/badge/Download-PLM%20Data-ffcc00.svg)](https://huggingface.co/datasets/facebook/PLM-Video-Human)
 [![Hugging Face Collection](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Collection-blue)](https://huggingface.co/collections/facebook/perception-lm-67f9783f171948c383ee7498)
 [![Paper](https://img.shields.io/badge/Technical%20Report-PerceptionLM-b31b1b.svg)](https://ai.meta.com/research/publications/perceptionlm-open-access-data-and-models-for-detailed-visual-understanding)
 [![Paper](https://img.shields.io/badge/arXiv-2504.13180-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2504.13180)
@@ -164,6 +256,115 @@ PLM releases models in three different sizes (1B, 3B and 8B).
 > [!TIP]
 > See [`apps/plm/README.md`](apps/plm/README.md) for details and how to get started!
 
+## Dataset Releases
+
+
+### 🎥 [PE-Video-Dataset (PVD)](https://huggingface.co/datasets/facebook/PE-Video)
+
+
+PVD comprises 1M high quality and diverse videos. Among them, 120K videos are accompanied by automated and human-verified annotations. and all videos are accompanied with video description and keywords. The videos are motion-centered, covering both first-person and third-person views with a wide coverage of scenes.
+
+🔹 [**PVD**](https://huggingface.co/datasets/facebook/PE-Video) - 1M High-Quality Human Annotated Video Dataset
+
+<table>
+   <tr>
+    <td colspan="2" align="center"><strong>PVD</strong></td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/ead8a7ed-4d5b-465a-a396-68948683dfcf" alt="output_2" width="300"/><br>
+      A person's hands pruning a plant with green leaves.
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/9e509e49-f550-4c5c-9571-ed57c5118227" alt="output" width="300"/><br>
+      A detailed diorama of a rural landscape featuring a horse-drawn carriage moving along a dirt path
+    </td>
+  </tr>
+</table>
+
+---
+
+
+### 🎥 [PLM-Video-Human](https://huggingface.co/datasets/facebook/PLM-Video-Human)
+
+PLM-Video-Human is a collection of human-annotated resources for training Vision Language Models, focused on detailed video understanding. Training tasks include:
+
+🔹 [**FGQA**](https://huggingface.co/datasets/facebook/PLM-Video-Human#fine-grained-question-answering-fgqa) — Fine-Grained Question Answering
+🔹 [**RTLoc**](https://huggingface.co/datasets/facebook/PLM-Video-Human#region-temporal-localization-rtloc) — Region-Temporal Localization
+🔹 [**RCap**](https://huggingface.co/datasets/facebook/PLM-Video-Human#region-video-captioning-rcap) — Region Video Captioning
+🔹 [**RDCap**](https://huggingface.co/datasets/facebook/PLM-Video-Human#region-dense-temporal-captioning-rdcap) — Region Dense Temporal Captioning
+
+<table>
+  <tr>
+    <td colspan="2" align="center"><strong>FGQA</strong></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="https://github.com/user-attachments/assets/4f5c6c5e-687d-49df-9bf8-db9ec7f1f281" alt="fgqa" width="500"/>
+    </td>
+  </tr>
+  <tr>
+    <th>Question</th>
+    <th>Answer</th>
+  </tr>
+  <tr>
+    <td>In what direction do you move the tool while removing the shell?</td>
+    <td>Both clockwise and anticlockwise.</td>
+  </tr>
+</table>
+
+<table>
+   <tr>
+    <td colspan="2" align="center"><strong>STC</strong></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <img src="https://github.com/user-attachments/assets/a2a129c7-c1e9-47b5-a3b4-fc96a237a9fb" alt="stc" width="500"/>
+    </td>
+  </tr>
+  <tr>
+    <th>Time (s) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>[0, 4]</td>
+    <td>The masked subject is a young boy wearing a red jacket and gray pants. He is grasping a monkey bar–like activity in a playground.</td>
+  </tr>
+  <tr>
+    <td>[5, 14]</td>
+    <td>He lets go of his hands and runs to the right side of the frame.</td>
+  </tr>
+  <tr>
+    <td>[15, 30]</td>
+    <td>The subject is out of frame.</td>
+  </tr>
+  <tr>
+    <td>[31, 45]</td>
+    <td>The subject runs back into the frame toward the higher monkey bar in the playground.</td>
+  </tr>
+  <tr>
+    <td>[46, 74]</td>
+    <td>He jumps underneath the metal bar and looks up at it. A man wearing a white polo runs toward the subject.</td>
+  </tr>
+  <tr>
+    <td>[75, 116]</td>
+    <td>The man in the white polo lifts the subject upward so he can grasp the higher metal bar. The subject holds onto the bar and hangs from it.</td>
+  </tr>
+</table>
+
+---
+
+### 🤖 Auto-Generated Datasets
+
+Sythetic image/video captions and QAs used in PLM, please refer to the paper, Section 3 (PLM), for more details. The sythetic annotations covers: SA1B, Openimages, Obejct365, ArxivQA, UCSF, PDFAcc, YT-1B, Ego4d with captions, YT-1B with MCQAs and Ego4d with QAs.
+
+🖼️ [**PLM-Image-Auto**](https://huggingface.co/datasets/facebook/PLM-Image-Auto) — Automatically generated image datasets
+
+📹 [**PLM-Video-Auto**](https://huggingface.co/datasets/facebook/PLM-Video-Auto) — Automatically generated video datasets
+
+
+---
+
 ## Installation :wrench:
 ```shell
 git clone https://github.com/facebookresearch/perception_models.git
@@ -185,7 +386,7 @@ This will install an editable version of repo, allowing you to make changes to t
 
 
 ## 🙏 Acknowledgement
-We are thankful to [Meta Lingua](https://github.com/facebookresearch/lingua) for releasing their code as open-source contributions. The code structure and code implementation of the LLM is directly forked from [Meta Lingua](https://github.com/facebookresearch/lingua). We are also thankful to [Open_CLIP](https://github.com/mlfoundations/open_clip) for open-source contributions in CLIP training, and [CLIP_benchmark](https://github.com/LAION-AI/CLIP_benchmark) for CLIP model evaluation. 
+We are thankful to [Meta Lingua](https://github.com/facebookresearch/lingua) for releasing their code as open-source contributions. The code structure and code implementation of the LLM is directly forked from [Meta Lingua](https://github.com/facebookresearch/lingua). We are also thankful to [Open_CLIP](https://github.com/mlfoundations/open_clip) for open-source contributions in CLIP training, and [CLIP_benchmark](https://github.com/LAION-AI/CLIP_benchmark) for CLIP model evaluation.
 
 
 ## 📜 Citation

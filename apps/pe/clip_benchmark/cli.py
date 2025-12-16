@@ -10,6 +10,7 @@ import random
 import sys
 from copy import copy
 from itertools import product
+from functools import partial
 
 # Determine the parent directory of the clip_benchmark package
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -21,7 +22,7 @@ from clip_benchmark.datasets.builder import (build_dataset, dataset_collection,
                                              get_dataset_collate_fn,
                                              get_dataset_collection_from_file,
                                              get_dataset_default_task,
-                                             is_video_dataset)
+                                             is_video_dataset, is_audio_dataset)
 from clip_benchmark.metrics import (linear_probe, multiclass_retrieval,
                                     visualization, zeroshot_classification,
                                     zeroshot_retrieval)
@@ -47,7 +48,7 @@ class ParseKwargs(argparse.Action):
 from dataclasses import dataclass
 import core.vision_encoder.pe as pe
 import core.vision_encoder.transforms as transforms
-
+from core.audio_visual_encoder import PEAudioVisual, PEAudioVisualTransform
 
 @dataclass
 class Visualization:
@@ -270,10 +271,15 @@ def get_parser_args():
     parser_eval.add_argument(
         "--reweight-retrieval",
         default=True,
-        action="store_true",
+        action=argparse.BooleanOptionalAction,
         help="use the softmax trick to reweight the retrieval scores",
     )
-
+    parser_eval.add_argument(
+        "--reweight-scale",
+        default=1.0,
+        type=float,
+        help="Scale the scores prior to doing the softmax trick to reweight"
+    )
     parser_eval.add_argument(
         "--visualize",
         nargs="*",
@@ -565,12 +571,17 @@ def run(args):
     if args.skip_load:
         model, transform, collate_fn, dataloader = None, None, None, None
     else:
-        model_name = args.model
-        model = pe.CLIP.from_config(model_name, pretrained=True)  # Downloads from HF
-        model = model.cuda()
-
-        transform = transforms.get_image_transform(model.image_size)
-        tokenizer = transforms.get_text_tokenizer(model.context_length)
+        if args.model.startswith("pe-av"):
+            # Load PE-AV model
+            model = PEAudioVisual.from_config(args.model, pretrained=True).cuda()
+            transform = PEAudioVisualTransform.from_config(args.model)
+            tokenizer = partial(transform.tokenizer, padding=True, return_tensors="pt")
+        else:
+            model_name = args.model
+            model = pe.CLIP.from_config(model_name, pretrained=True)  # Downloads from HF
+            model = model.cuda()
+            transform = transforms.get_image_transform(model.image_size)
+            tokenizer = transforms.get_text_tokenizer(model.context_length)
 
         model.eval()
 
@@ -588,7 +599,10 @@ def run(args):
             wds_cache_dir=args.wds_cache_dir,
             num_frames=args.num_frames,
         )
-        collate_fn = get_dataset_collate_fn(args.dataset)
+        if hasattr(dataset, "collate_fn"):
+            collate_fn = dataset.collate_fn
+        else:
+            collate_fn = get_dataset_collate_fn(args.dataset)
 
         if hasattr(transform, "collate_fn"):
             # Union the dataloader's collate fn (which deals with images) with clipbench's collate fn (which deals with text)
@@ -672,6 +686,8 @@ def run(args):
             device=args.device,
             amp=args.amp,
             args=args,
+            audio_dataset=is_audio_dataset(args.dataset),
+            transform=transform,
         )
     elif task == "multiclass_retrieval":
         metrics = multiclass_retrieval.evaluate(
@@ -767,6 +783,7 @@ def run(args):
         dump["templates"] = dataset.templates
     if args.verbose:
         print(f"Dump results to: {output}")
+    os.makedirs(os.path.dirname(output), exist_ok=True)
     with open(output, "w") as f:
         json.dump(dump, f)
     return 0
