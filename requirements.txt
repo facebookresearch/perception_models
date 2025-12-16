@@ -31,3 +31,4 @@ fsspec
 datatrove
 ftfy
 transformers>=4.48.0
+xformers
