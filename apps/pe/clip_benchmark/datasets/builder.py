@@ -12,7 +12,7 @@ from torchvision.datasets import (CIFAR10, CIFAR100, DTD, GTSRB, MNIST, PCAM,
                                   ImageFolder, ImageNet, OxfordIIITPet,
                                   RenderedSST2, StanfordCars)
 
-from . import (babel_imagenet, caltech101, flickr, imagenetv2, objectnet,
+from . import (audiocaps, babel_imagenet, caltech101, clotho_v2, flickr, imagenetv2, objectnet,
                pos_neg_caption_dataset, video_classification_dataset,
                video_retrieval_dataset, voc2007, winoground)
 
@@ -151,6 +151,14 @@ def build_dataset(
         ds = video_classification_dataset.VideoClassificationDataset(
             "", task_config, transform, num_frames=num_frames
         )
+    elif dataset_name == "clotho-v2":
+        ds = clotho_v2.ClothoV2(transform)
+    elif dataset_name == "audiocaps-audio-text":
+        ds = audiocaps.AudiocapsAudioText(transform, root=root)
+    elif dataset_name == "audiocaps-video-text":
+        ds = audiocaps.AudiocapsVideoText(transform, root=root)
+    elif dataset_name == "audiocaps-audio-video":
+        ds = audiocaps.AudiocapsAudioVideo(transform, root=root)
     elif dataset_name == "msrvtt":
         ds = video_retrieval_dataset.VideoRetrievalDataset(
             MSRVTT_ANN,
@@ -1520,6 +1528,10 @@ def get_dataset_default_task(dataset):
         "msvd",
         "didemo",
         "anet",
+        "clotho-v2",
+        "audiocaps-audio-text",
+        "audiocaps-video-text",
+        "audiocaps-audio-video",
     ):
         return "zeroshot_retrieval"
     elif dataset in ("pug_animals"):
@@ -1549,11 +1561,19 @@ def is_video_dataset(dataset):
         "msvd",
         "didemo",
         "anet",
+        "audiocaps-video-text",
+        "audiocaps-audio-video",
     ):
         return True
     else:
         return False
 
+def is_audio_dataset(dataset):
+    return dataset in (
+        "clotho-v2",
+        "audiocaps-audio-text",
+        "audiocaps-audio-video",
+    )
 
 def get_dataset_collate_fn(dataset_name):
     dataset_name = dataset_name.split("wds_")[-1]

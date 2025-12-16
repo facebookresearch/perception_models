@@ -30,3 +30,4 @@ webdataset==0.2.111
 fsspec
 datatrove
 ftfy
+transformers>=4.48.0
