@@ -1,6 +1,7 @@
 # Perception Encoder (PE)
 
 [![Paper](https://img.shields.io/badge/Paper-Perception%20Encoder-b31b1b.svg)](https://ai.meta.com/research/publications/perception-encoder-the-best-visual-embeddings-are-not-at-the-output-of-the-network)
+[![Paper](https://img.shields.io/badge/Technical%20Report-Perception%20Encoder-b31b1b.svg)](https://ai.meta.com/research/publications/pushing-the-frontier-of-audiovisual-perception-with-large-scale-multimodal-correspondence-learning/)
 [![Paper](https://img.shields.io/badge/arXiv-2504.13181-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2504.13181)
 [![Hugging Face Collection](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Collection-blue)](https://huggingface.co/collections/facebook/perception-encoder-67f977c9a65ca5895a7f6ba1)
 [![Colab Demo](https://img.shields.io/static/v1?label=Demo&message=Google%20Colab&logo=google&color=orange)](https://colab.research.google.com/github/facebookresearch/perception_models/blob/main/apps/pe/docs/pe_demo.ipynb)
@@ -21,10 +22,11 @@ The result is an extremely powerful family of checkpoints: PE core can outperfor
 
 
 ### Contents
-PE has 3 types of checkpoints, each excelling in a different area of computer vision:
+PE has 4 types of checkpoints, each excelling in a different area of computer vision:
  - [PE core](#perception-encoder-core): a state-of-the-art CLIP model for zero-shot image and video classification as well as image and video retrieval.
  - [PE lang](#perception-encoder-language): a state-of-the-art large language model aligned vision encoder that enables our open-data [Perception Language Model (PLM)](../plm/README.md) to compete at the forefront of the field.
  - [PE spatial](#perception-encoder-spatial): a state-of-the-art spatially tuned model that can outperform the best spatial models for dense prediction tasks like detection, depth estimation, and tracking.
+ - [PE-AV](#perception-encoder-audiovisual): a state-of-the-art spatially tuned model that can outperform the best spatial models for dense prediction tasks like detection, depth estimation, and tracking.
 
 Finally, we also release a dataset we collected in the process of creating our novel video data engine:
  - [PE Video Dataset (PVD)](#pe-video-dataset-pvd): an diverse set of 1M high quality datasets with accompanying metadata as well as 120K human-refined detailed video captions.
@@ -125,6 +127,30 @@ See the paper for more details and benchmarks for the G model.
 | 🆕 | **L/14** 448px | [PE-Spatial-L14-448](https://huggingface.co/facebook/PE-Spatial-L14-448) | 48.1 | 60.6 |
 
 The smaller models are distilled from the G/14 model using a mixturre of pairwise token cosine similarly and direct distillation. More details and evals for the smaller models are coming soon!
+
+
+## Perception Encoder: AudioVisual
+Perception Encoder Audiovisual (PE-AV), is the engine behind [SAM Audio](https://ai.meta.com/blog/sam-audio/). It powers core components such as the primary captioning model and SAM Audio Judge, the automatic judge model for audio separation. PE-AV scales up contrastive learning with a robust audiovisual data engine. PE-AV establishes a new state-of-the-art across a wide range of audio and video benchmarks by enabling unified audio-visual-text embeddings.
+
+#### Audio-Visual Benchmarks
+
+| Model        | Avg Retrieval | AudioCaps T→A | AudioCaps T→V | AudioCaps V→A | Clotho T→A | Valor T→A | Valor T→V | VCTK A→T | VGGSound V→A | Internal V→A |
+|--------------|---------------|---------------|---------------|---------------|------------|-----------|-----------|----------|---------------|---------------|
+| [`pe-av-small-16-frame`](https://huggingface.co/facebook/pe-av-small-16-frame)  | 45.2          | 41.2          | 18.6          | 75.4          | 24.0       | 29.8      | 70.1      | 96.1     | 34.1          | 17.9          |
+| [`pe-av-base-16-frame`](https://huggingface.co/facebook/pe-av-base-16-frame)   | 47.0          | 43.1          | 19.8          | 80.6          | 23.4       | 31.9      | 70.0      | 94.8     | 39.0          | 20.4          |
+| [`pe-av-large-16-frame`](https://huggingface.co/facebook/pe-av-large-16-frame)  | 48.2          | 44.7          | 19.5          | 86.1          | 22.8       | 35.0      | 70.9      | 85.6     | 45.2          | 23.9          |
+| [`pe-av-small`](https://huggingface.co/facebook/pe-av-small)           | 48.1          | 41.8          | 18.8          | 77.4          | 23.9       | 29.3      | 70.9      | 94.9     | 35.4          | 40.5          |
+| [`pe-av-base`](https://huggingface.co/facebook/pe-av-base)            | 50.2          | 42.7          | 19.6          | 83.7          | 23.8       | 30.8      | 71.2      | 94.9     | 40.7          | 44.6          |
+| [`pe-av-large`](https://huggingface.co/facebook/pe-av-large)           | 51.6          | 45.8          | 20.8          | 88.3          | 23.0       | 35.1      | 70.9      | 85.6     | 48.3          | 46.5          |
+
+#### Audio Event Localization Benchmarks
+
+|                  | Internal Bench (AUROC)      | ASFX-SED (AUROC)        | AudioSet-Strong (AUROC) | DESED (AUROC) | UrbanSED (AUROC) |
+|------------------|---------------------|------------------|-----------------------|-------------|-------------|
+| [`pe-a-frame-small`](https://huggingface.co/facebook/pe-a-frame-small)| 0.91                | 0.83             | 0.96                  | 0.96        | 0.88        |
+| [`pe-a-frame-base`](https://huggingface.co/facebook/pe-a-frame-base)| 0.92                | 0.83             | 0.96                  | 0.98        | 0.89        |
+| [`pe-a-frame-large`](https://huggingface.co/facebook/pe-a-frame-large)| 0.91                | 0.83             | 0.96                  | 0.97        | 0.89        |
+
 
 ## PE Video Dataset (PVD)
 In the process of developing the video data engine we use for PE core, we have collected a high-quality video dataset that contains 1M diverse videos with high visual fidelity and large resolution, split into 10 high level categories. We also annotated 120K samples with the highest amount of motiotion with our video captioning data engine and further asked human annotators to refine the captions. You can find more information about and download PVD [here](https://ai.meta.com/datasets/pe-video/).

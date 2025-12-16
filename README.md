@@ -1,19 +1,19 @@
-# Perception Models: Powerful Models for Image and Video Perception
+# Perception Models: Powerful Models for Image, Video, and Audio Perception
 [![Code License](https://img.shields.io/badge/Code_License-Apache_2.0-olive)](https://opensource.org/licenses/Apache-2.0)
 
-This repo is the home to the state-of-the-art for image and video _perception_: [**Perception Encoder (PE)**](https://arxiv.org/abs/2504.13181) for image and video encoding and [**Perception Language Model (PLM)**](https://arxiv.org/abs/2504.13180) for decoding.
+This repo is the home to the state-of-the-art for image and video _perception_: [**Perception Encoder (PE)**](https://arxiv.org/abs/2504.13181) for image, video, [audio](https://ai.meta.com/research/publications/pushing-the-frontier-of-audiovisual-perception-with-large-scale-multimodal-correspondence-learning/) encoding, and [**Perception Language Model (PLM)**](https://arxiv.org/abs/2504.13180) for decoding.
 
 > [!TIP]
 > Click to Navigate!
 >
-> [Perception Encoder](#perception-encoder-pe)
+> [Perception Encoder and Perception Encoder Audio-Visual](#perception-encoder-pe)
 >
 > [Perception Language Model](#perception-language-model-plm)
 >
 > [Dataset Releases](#dataset-releases)
 
 ## Updates
-* **[Dec-16-25]:** We have released the Perception Encoder Audio-Visual (PE-AV) and Perception Encoder Audio-Frame (PE-A-Frame) models [[paper](TODO: add arxiv link)] :fire::fire:
+* **[Dec-16-25]:** We have released the Perception Encoder Audio-Visual (PE-AV) and Perception Encoder Audio-Frame (PE-A-Frame) models: [[`Blog`](https://ai.meta.com/blog/sam-audio/)][[`paper`](https://ai.meta.com/research/publications/pushing-the-frontier-of-audiovisual-perception-with-large-scale-multimodal-correspondence-learning/)] :fire::fire:
 * **[Jul-14-25]:** PerceptionLM is now available in [Hugging Face transformers](https://huggingface.co/docs/transformers/main/en/model_doc/perception_lm). :fire::fire:
 * **[Jul-11-25]:** We have release 8 new checkpoints for [Perception Encoder](apps/pe/README.md): 2x small core models (T and S), 2x tiling-tuned lang models (G and L), and 4x smaller spatial models (L, B, S, T). Give them a try! :fire::fire::fire:
 * **[May-28-25]:** Perception Encoder has been integrated into [timm](https://github.com/huggingface/pytorch-image-models)! :fire::fire:
@@ -25,20 +25,21 @@ This repo is the home to the state-of-the-art for image and video _perception_: 
 [![Data](https://img.shields.io/badge/Download-PE%20Data-ffcc00.svg)](https://huggingface.co/datasets/facebook/PE-Video)
 [![Hugging Face Collection](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Collection-blue)](https://huggingface.co/collections/facebook/perception-encoder-67f977c9a65ca5895a7f6ba1)
 [![Paper](https://img.shields.io/badge/Technical%20Report-Perception%20Encoder-b31b1b.svg)](https://ai.meta.com/research/publications/perception-encoder-the-best-visual-embeddings-are-not-at-the-output-of-the-network)
+[![Paper](https://img.shields.io/badge/Technical%20Report-Perception%20Encoder-b31b1b.svg)](https://ai.meta.com/research/publications/pushing-the-frontier-of-audiovisual-perception-with-large-scale-multimodal-correspondence-learning/)
 [![Paper](https://img.shields.io/badge/arXiv-2504.13181-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2504.13181)
 [![Colab Demo](https://img.shields.io/static/v1?label=Demo&message=Google%20Colab&logo=google&color=orange)](https://colab.research.google.com/github/facebookresearch/perception_models/blob/main/apps/pe/docs/pe_demo.ipynb)
 [![Model License](https://img.shields.io/badge/Model_License-Apache_2.0-olive)](https://opensource.org/licenses/Apache-2.0)
 
-[Perception Encoder (PE)](https://arxiv.org/abs/2504.13181) is a family of the state-of-the-art vision encoders for encoding images and video: PE core outperforms SigLIP2 on image and InternVideo2 on video benchmarks; PE lang can be used to outperform QwenVL2.5 and InternVL3 on vision language modeling; and PE spatial outperforms DINOv2 on dense prediction tasks. And all of this follows the same, easily scalable contrastive pretraining. Please see [README](apps/pe/README.md) for more details.
+[Perception Encoder (PE)](https://arxiv.org/abs/2504.13181) is a family of the state-of-the-art vision and audio encoders for encoding images, video, and audio: PE core outperforms SigLIP2 on image and InternVideo2 on video benchmarks; PE lang can be used to outperform QwenVL2.5 and InternVL3 on vision language modeling; and PE spatial outperforms DINOv2 on dense prediction tasks. And all of this follows the same, easily scalable contrastive pretraining. Please see [README](apps/pe/README.md) for more details.
 
 <img src="apps/pe/docs/assets/teaser.png" style="width: 100%; margin: 0 auto; display: block;" />
 
 ### Models
-PE has 3 types of checkpoints, each excelling in a different area of computer vision:
- - [PE core](#perception-encoder-core): a CLIP model excels in vision-language tasks such as zero-shot image and video classification and video retrieval.
- - [PE lang](#perception-encoder-language): a LLM-aligned PE that powers [PLM)](https://arxiv.org/abs/2504.13180) to compete at the forefront of multimodal LLM benchmarks.
- - [PE spatial](#perception-encoder-spatial): a spatially tuned PE that outperforms best spatial models for vision-centric tasks such as detection, depth estimation, and tracking.
- - [PE audio-visual](#perception-encoder-audio-visual): a CLIP Model that embeds audio, video, audio-video, and text into a joint embedding space.
+PE has 4 types of checkpoints, each excelling in a different area of computer vision and audio understanding:
+ - [PE core](#vision-language-benchmarks): a CLIP model excels in vision-language tasks such as zero-shot image and video classification and video retrieval.
+ - [PE lang](#multimodal-llm-benchmarks): a LLM-aligned PE that powers [PLM](https://arxiv.org/abs/2504.13180) to compete at the forefront of multimodal LLM benchmarks.
+ - [PE spatial](#vision-centric-benchmarks): a spatially tuned PE that outperforms best spatial models for vision-centric tasks such as detection, depth estimation, and tracking.
+ - [PE audio-visual](#audio-visual-benchmarks): a CLIP Model that embeds audio, video, audio-video, and text into a joint embedding space.
 
 #### Vision-Language Benchmarks
 |    | Model | Checkpoint | IN-1k | IN-v2 | IN-A | ObjectNet | COCO-T2I | Kinetics-400 | VTT-T2V
