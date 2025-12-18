@@ -375,11 +375,11 @@ conda create --name perception_models python=3.12
 conda activate perception_models
 
 # Install PyTorch
-pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 xformers --index-url https://download.pytorch.org/whl/cu124
+pip install torch torchvision torchaudio xformers --index-url https://download.pytorch.org/whl/cu124
 
 # We use torchcodec for decoding videos into PyTorch tensors
 conda install ffmpeg -c conda-forge
-pip install torchcodec==0.1 --index-url=https://download.pytorch.org/whl/cu124
+pip install torchcodec --index-url=https://download.pytorch.org/whl/cu124
 
 pip install -e .
 ```
