@@ -25,7 +25,7 @@ This repo is the home to the state-of-the-art for image and video _perception_: 
 [![Data](https://img.shields.io/badge/Download-PE%20Data-ffcc00.svg)](https://huggingface.co/datasets/facebook/PE-Video)
 [![Hugging Face Collection](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Collection-blue)](https://huggingface.co/collections/facebook/perception-encoder-67f977c9a65ca5895a7f6ba1)
 [![Paper](https://img.shields.io/badge/Technical%20Report-Perception%20Encoder-b31b1b.svg)](https://ai.meta.com/research/publications/perception-encoder-the-best-visual-embeddings-are-not-at-the-output-of-the-network)
-[![Paper](https://img.shields.io/badge/Technical%20Report-Perception%20Encoder-b31b1b.svg)](https://ai.meta.com/research/publications/pushing-the-frontier-of-audiovisual-perception-with-large-scale-multimodal-correspondence-learning/)
+[![Paper](https://img.shields.io/badge/Technical%20Report-Perception%20Encoder%20AV-b31b1b.svg)](https://ai.meta.com/research/publications/pushing-the-frontier-of-audiovisual-perception-with-large-scale-multimodal-correspondence-learning/)
 [![Paper](https://img.shields.io/badge/arXiv-2504.13181-brightgreen.svg?style=flat-square)](https://arxiv.org/abs/2504.13181)
 [![Colab Demo](https://img.shields.io/static/v1?label=Demo&message=Google%20Colab&logo=google&color=orange)](https://colab.research.google.com/github/facebookresearch/perception_models/blob/main/apps/pe/docs/pe_demo.ipynb)
 [![Model License](https://img.shields.io/badge/Model_License-Apache_2.0-olive)](https://opensource.org/licenses/Apache-2.0)
@@ -44,8 +44,8 @@ PE has 4 types of checkpoints, each excelling in a different area of computer vi
 #### Vision-Language Benchmarks
 |    | Model | Checkpoint | IN-1k | IN-v2 | IN-A | ObjectNet | COCO-T2I | Kinetics-400 | VTT-T2V
 |:--:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| 🆕 | **T/16** 384px | [PE-Core-T16-384](https://huggingface.co/facebook/PE-Core-T16-384) | 62.1 | 54.7 | 21.1 | 43.9 | 33.0 | 41.5 | 28.8 |
-| 🆕 | **S/16** 384px | [PE-Core-S16-384](https://huggingface.co/facebook/PE-Core-S16-384) | 72.7 | 65.0 | 49.5 | 60.0 | 42.6 | 55.0 | 39.3 |
+|    | **T/16** 384px | [PE-Core-T16-384](https://huggingface.co/facebook/PE-Core-T16-384) | 62.1 | 54.7 | 21.1 | 43.9 | 33.0 | 41.5 | 28.8 |
+|    | **S/16** 384px | [PE-Core-S16-384](https://huggingface.co/facebook/PE-Core-S16-384) | 72.7 | 65.0 | 49.5 | 60.0 | 42.6 | 55.0 | 39.3 |
 |    | **B/16** 224px | [PE-Core-B16-224](https://huggingface.co/facebook/PE-Core-B16-224) | 78.4 | 71.7 | 62.4 | 71.9 | 50.9 | 65.6 | 47.6 |
 |    | **L/14** 336px | [PE-Core-L14-336](https://huggingface.co/facebook/PE-Core-L14-336) | 83.5 | 77.9 | 89.0 | 84.7 | 57.1 | 73.4 | 50.3 |
 |    | **G/14** 448px | [PE-Core-G14-448](https://huggingface.co/facebook/PE-Core-G14-448) | 85.4 | 80.2 | 92.6 | 88.2 | 58.1 | 76.9 | 51.2 |
@@ -62,8 +62,8 @@ PE has 4 types of checkpoints, each excelling in a different area of computer vi
 🔥 SotA Setting:
 |    | Model | Encoder | Doc VQA (test) | InfoQA (test) | TextVQA | MVBench | PerceptionTest (test) | EgoSchema (test) |
 |:--:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| 🆕 | PLM-3B | [PE-Lang-L14-448-Tiling](https://huggingface.co/facebook/PE-Lang-L14-448-Tiling)* | 93.8 | 74.6 | 84.3 | 74.7 | 79.3 | 66.9 |
-| 🆕 | PLM-8B | [PE-Lang-G14-448-Tiling](https://huggingface.co/facebook/PE-Lang-G14-448-Tiling)* | 94.6 | 80.9 | 86.5 | 77.1 | 82.7 | 68.8 |
+|    | PLM-3B | [PE-Lang-L14-448-Tiling](https://huggingface.co/facebook/PE-Lang-L14-448-Tiling)* | 93.8 | 74.6 | 84.3 | 74.7 | 79.3 | 66.9 |
+|    | PLM-8B | [PE-Lang-G14-448-Tiling](https://huggingface.co/facebook/PE-Lang-G14-448-Tiling)* | 94.6 | 80.9 | 86.5 | 77.1 | 82.7 | 68.8 |
 
 \* These checkpoints were aligned with tiling. Use them if you use higher than 448 resolution with tiling in the LLM decoder.
 
@@ -83,31 +83,31 @@ PE has 4 types of checkpoints, each excelling in a different area of computer vi
 ⚗️ Distilled Models:
 |    | Encoder<br />(Distilled from G) | Checkpoint | ADE20k <br/> [Segmentation](https://github.com/open-mmlab/mmsegmentation)<br />Linear Probe mIoU | DAVIS<br /> [Tracking](https://github.com/facebookresearch/dino/blob/main/eval_video_segmentation.py) <br />Zero-Shot J&F  |
 |:--:|:---:|:---:|:---:|:---:|
-| 🆕 | **T/16** 512px | [PE-Spatial-T16-512](https://huggingface.co/facebook/PE-Spatial-T16-512) | 27.6 | 55.0 |
-| 🆕 | **S/16** 512px | [PE-Spatial-S16-512](https://huggingface.co/facebook/PE-Spatial-S16-512) | 37.5 | 57.5 |
-| 🆕 | **B/16** 512px | [PE-Spatial-B16-512](https://huggingface.co/facebook/PE-Spatial-B16-512) | 44.4 | 58.9 |
-| 🆕 | **L/14** 448px | [PE-Spatial-L14-448](https://huggingface.co/facebook/PE-Spatial-L14-448) | 48.1 | 60.6 |
+|    | **T/16** 512px | [PE-Spatial-T16-512](https://huggingface.co/facebook/PE-Spatial-T16-512) | 27.6 | 55.0 |
+|    | **S/16** 512px | [PE-Spatial-S16-512](https://huggingface.co/facebook/PE-Spatial-S16-512) | 37.5 | 57.5 |
+|    | **B/16** 512px | [PE-Spatial-B16-512](https://huggingface.co/facebook/PE-Spatial-B16-512) | 44.4 | 58.9 |
+|    | **L/14** 448px | [PE-Spatial-L14-448](https://huggingface.co/facebook/PE-Spatial-L14-448) | 48.1 | 60.6 |
 
 See paper for comparison to other models.
 
 #### Audio-Visual Benchmarks
 
-| Model        | Avg Retrieval | AudioCaps T→A | AudioCaps T→V | AudioCaps V→A | Clotho T→A | Valor T→A | Valor T→V | VCTK A→T | VGGSound V→A | Internal V→A |
-|--------------|---------------|---------------|---------------|---------------|------------|-----------|-----------|----------|---------------|---------------|
-| [`pe-av-small-16-frame`](https://huggingface.co/facebook/pe-av-small-16-frame)  | 45.2          | 41.2          | 18.6          | 75.4          | 24.0       | 29.8      | 70.1      | 96.1     | 34.1          | 17.9          |
-| [`pe-av-base-16-frame`](https://huggingface.co/facebook/pe-av-base-16-frame)   | 47.0          | 43.1          | 19.8          | 80.6          | 23.4       | 31.9      | 70.0      | 94.8     | 39.0          | 20.4          |
-| [`pe-av-large-16-frame`](https://huggingface.co/facebook/pe-av-large-16-frame)  | 48.2          | 44.7          | 19.5          | 86.1          | 22.8       | 35.0      | 70.9      | 85.6     | 45.2          | 23.9          |
-| [`pe-av-small`](https://huggingface.co/facebook/pe-av-small)           | 48.1          | 41.8          | 18.8          | 77.4          | 23.9       | 29.3      | 70.9      | 94.9     | 35.4          | 40.5          |
-| [`pe-av-base`](https://huggingface.co/facebook/pe-av-base)            | 50.2          | 42.7          | 19.6          | 83.7          | 23.8       | 30.8      | 71.2      | 94.9     | 40.7          | 44.6          |
-| [`pe-av-large`](https://huggingface.co/facebook/pe-av-large)           | 51.6          | 45.8          | 20.8          | 88.3          | 23.0       | 35.1      | 70.9      | 85.6     | 48.3          | 46.5          |
+|    | Model | Checkpoint   | Avg Retrieval | AudioCaps T→A | AudioCaps T→V | AudioCaps V→A | Clotho T→A | Valor T→A | Valor T→V | VCTK A→T | VGGSound V→A | Internal V→A |
+|:--:|:-----:|--------------|---------------|---------------|---------------|---------------|------------|-----------|-----------|----------|---------------|---------------|
+| 🆕 | **AV S** 16 frames | [`pe-av-small-16-frame`](https://huggingface.co/facebook/pe-av-small-16-frame)  | 45.2          | 41.2          | 18.6          | 75.4          | 24.0       | 29.8      | 70.1      | 96.1     | 34.1          | 17.9          |
+| 🆕 | **AV B** 16 frames | [`pe-av-base-16-frame`](https://huggingface.co/facebook/pe-av-base-16-frame)   | 47.0          | 43.1          | 19.8          | 80.6          | 23.4       | 31.9      | 70.0      | 94.8     | 39.0          | 20.4          |
+| 🆕 | **AV L** 16 frames | [`pe-av-large-16-frame`](https://huggingface.co/facebook/pe-av-large-16-frame)  | 48.2          | 44.7          | 19.5          | 86.1          | 22.8       | 35.0      | 70.9      | 85.6     | 45.2          | 23.9          |
+| 🆕 | **AV S** all frames | [`pe-av-small`](https://huggingface.co/facebook/pe-av-small)           | 48.1          | 41.8          | 18.8          | 77.4          | 23.9       | 29.3      | 70.9      | 94.9     | 35.4          | 40.5          |
+| 🆕 | **AV B** all frames | [`pe-av-base`](https://huggingface.co/facebook/pe-av-base)            | 50.2          | 42.7          | 19.6          | 83.7          | 23.8       | 30.8      | 71.2      | 94.9     | 40.7          | 44.6          |
+| 🆕 | **AV L** all frames | [`pe-av-large`](https://huggingface.co/facebook/pe-av-large)           | 51.6          | 45.8          | 20.8          | 88.3          | 23.0       | 35.1      | 70.9      | 85.6     | 48.3          | 46.5          |
 
 #### Audio Event Localization Benchmarks
 
-|                  | Internal Bench (AUROC)      | ASFX-SED (AUROC)        | AudioSet-Strong (AUROC) | DESED (AUROC) | UrbanSED (AUROC) |
-|------------------|---------------------|------------------|-----------------------|-------------|-------------|
-| [`pe-a-frame-small`](https://huggingface.co/facebook/pe-a-frame-small)| 0.91                | 0.83             | 0.96                  | 0.96        | 0.88        |
-| [`pe-a-frame-base`](https://huggingface.co/facebook/pe-a-frame-base)| 0.92                | 0.83             | 0.96                  | 0.98        | 0.89        |
-| [`pe-a-frame-large`](https://huggingface.co/facebook/pe-a-frame-large)| 0.91                | 0.83             | 0.96                  | 0.97        | 0.89        |
+|    | Model |     Checkpoint   | Internal Bench (AUROC)      | ASFX-SED (AUROC)        | AudioSet-Strong (AUROC) | DESED (AUROC) | UrbanSED (AUROC) |
+|:--:|:-----:|------------------|---------------------|------------------|-----------------------|-------------|-------------|
+| 🆕 | **A-Frame S** | [`pe-a-frame-small`](https://huggingface.co/facebook/pe-a-frame-small)| 0.91                | 0.83             | 0.96                  | 0.96        | 0.88        |
+| 🆕 | **A-Frame B** | [`pe-a-frame-base`](https://huggingface.co/facebook/pe-a-frame-base)| 0.92                | 0.83             | 0.96                  | 0.98        | 0.89        |
+| 🆕 | **A-Frame L** | [`pe-a-frame-large`](https://huggingface.co/facebook/pe-a-frame-large)| 0.91                | 0.83             | 0.96                  | 0.97        | 0.89        |
 
 ### Getting Started with PE
 You can get started with the following example for image and text feature extraction or use our [Colab Demo](https://colab.research.google.com/github/facebookresearch/perception_models/blob/main/apps/pe/docs/pe_demo.ipynb)
