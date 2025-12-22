@@ -386,6 +386,38 @@ pip install -e .
 This will install an editable version of repo, allowing you to make changes to the code without needing to reinstall the package every time.
 
 
+## Run as Docker Container
+
+### Build Docker Container:
+```bash
+docker build -t facebookresearch/perception_models .
+```
+
+### Run Example:
+
+To run the model using Docker, first copy your video to `/tmp/demo.mp4`. Replace `HF_TOKEN` with your Hugging Face token, and adjust `MODEL` and `QUESTION` according to your needs:
+
+```bash
+HF_TOKEN=hf_REPLACE_ME
+QUESTION='What is happening in the video?'
+MEDIA='/tmp/demo.mp4'
+MODEL='facebook/Perception-LM-1B'
+
+docker run -it --gpus all \
+    -v /tmp:/tmp \
+    -e HF_TOKEN="${HF_TOKEN}" \
+    facebookresearch/perception_models \
+    conda run -n perception_models --no-capture-output \
+    python3 /perception_models/apps/plm/generate.py \
+    --ckpt "${MODEL}" \
+    --media_type video \
+    --question "${QUESTION}" \
+    --media_path "${MEDIA}"
+```
+
+This command runs the Docker container with available Nvidia GPUs attached.
+
+
 ## 🙏 Acknowledgement
 We are thankful to [Meta Lingua](https://github.com/facebookresearch/lingua) for releasing their code as open-source contributions. The code structure and code implementation of the LLM is directly forked from [Meta Lingua](https://github.com/facebookresearch/lingua). We are also thankful to [Open_CLIP](https://github.com/mlfoundations/open_clip) for open-source contributions in CLIP training, and [CLIP_benchmark](https://github.com/LAION-AI/CLIP_benchmark) for CLIP model evaluation.
 
