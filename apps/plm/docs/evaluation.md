@@ -26,13 +26,7 @@ You can use the following command to run the evaluation.
 CHECKPOINTS_PATH=facebook/Perception-LM-3B
 
 # Define the tasks you want to evaluate PLM on. We support all the tasks present in lmms-eval, however have tested the following tasks with our models.
-
-ALL_TASKS=(
-    "docvqa" "chartqa" "textvqa" "infovqa" "ai2d_no_mask" "ok_vqa" "vizwiz_vqa" "mme"
-    "realworldqa" "pope" "mmmu" "ocrbench" "coco_karpathy_val" "nocaps" "vqav2_val"
-    "mvbench" "videomme" "vatex_test" "egoschema" "egoschema_subset" "mlvu_dev"
-    "tempcompass_multi_choice" "perceptiontest_val_mc" "perceptiontest_test_mc"
-)
+ALL_TASKS="docvqa,chartqa,textvqa,infovqa,ai2d_no_mask,ok_vqa,vizwiz_vqa,mme,realworldqa,pope,mmmu,ocrbench,coco_karpathy_val,nocaps,vqav2_val,mvbench,videomme,vatex_test,egoschema,egoschema_subset,mlvu_dev,tempcompass_multi_choice,perceptiontest_val_mc,perceptiontest_test_mc"
 
 # After specifying the task/tasks to evaluate, run the following command to start the evaluation.
 SELECTED_TASK="textvqa,videomme"
