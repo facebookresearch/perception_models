@@ -77,7 +77,7 @@ PE has 4 types of checkpoints, each excelling in a different area of computer vi
 <div align="center">
   <img src="apps/pe/docs/assets/spatial_correspondence.png" style="width: 80%; margin: 0 auto; padding-top: 20px; padding-bottom: 20px; display: block;" />
 
-  Visualization of PCA of non-maked visual tokens, mapped to RGB values.
+  Visualization of PCA of non-masked visual tokens, mapped to RGB values.
 </div>
 
 ⚗️ Distilled Models:
