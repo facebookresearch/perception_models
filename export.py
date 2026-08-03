@@ -192,7 +192,7 @@ class ImageEncoderWrapper(nn.Module):
         self.model = model
 
     def forward(self, image: torch.Tensor) -> torch.Tensor:
-        feats = self.model.encode_image(image)
+        feats = self.model.encode_image(image, normalize=True)
         if isinstance(feats, (tuple, list)):
             feats = feats[0]
         return feats.contiguous()
@@ -204,7 +204,7 @@ class TextEncoderWrapper(nn.Module):
         self.model = model
 
     def forward(self, text_ids: torch.Tensor) -> torch.Tensor:
-        feats = self.model.encode_text(text_ids.long())
+        feats = self.model.encode_text(text_ids.long(), normalize=True)
         if isinstance(feats, (tuple, list)):
             feats = feats[0]
         return feats.contiguous()
@@ -434,8 +434,8 @@ def parse_args():
     p.add_argument("--config", default="PE-Core-L14-336")
     p.add_argument("--precision", choices=["fp16", "fp32", "both"], default="fp16")
     p.add_argument("--min-batch", type=int, default=1)
-    p.add_argument("--opt-batch", type=int, default=4)
-    p.add_argument("--max-batch", type=int, default=8)
+    p.add_argument("--opt-batch", type=int, default=5)
+    p.add_argument("--max-batch", type=int, default=10)
     p.add_argument("--output-dir", default="trt_out")
     p.add_argument("--benchmark-iters", type=int, default=50)
     p.add_argument("--warmup-iters", type=int, default=10)
